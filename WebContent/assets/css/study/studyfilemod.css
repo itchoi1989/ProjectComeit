@@ -1,0 +1,28 @@
+@charset "UTF-8";
+.detail th
+{
+	text-align: center;
+	background-color: #EEEEEE;
+}
+.tit td
+{
+	text-align: center;
+}
+.bottom
+{
+	text-align: center;
+}
+.btm
+{
+	display: inline-block;
+}
+.errMsg
+{
+	margin-bottom: 20px;
+	color: red;
+}
+.cancel
+{
+	background-color: #5f5f5f;
+	color: white;
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sys.comeit.idao.ILectureLecStudentDAO">
+
+	<!-- 강의관리에서 강의를 수강하고 있는 학생의 리스트 (이름, 회원이미지) -->
+	<select id="getStudentInfo" resultType="com.sys.comeit.dto.MemberDTO">
+		SELECT MJ.NAME AS NAME, MI.IMG_URL AS IMG_URL, LJ.MEM_CD AS MEM_CD
+		FROM TBL_LEC_JOIN LJ, TBL_MEM_JOIN MJ, TBL_MEM_IMG MI
+		WHERE LJ.MEM_CD = MJ.MEM_CD
+		AND MJ.MEM_ID = MI.MEM_ID(+)
+		AND LEC_CD = #{lec_cd}
+	</select>
+	
+</mapper>

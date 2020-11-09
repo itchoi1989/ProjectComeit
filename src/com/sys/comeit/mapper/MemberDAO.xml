@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IMemberDAO">
+
+	<!-- 멤버 정보 조회 list() -->
+	<select id="memberList" resultType="com.sys.comeit.dto.MemberDTO">
+	   SELECT ID, MEM_CD, NAME, EMAIL, TEL, 
+	         IDNTT, MEM_CONTENT, AREA_NAME, SPC_AREA_NAME, IMG_URL , JOIN_DATE , PWD
+	   FROM VIEW_MEM_MY
+	</select>
+	
+	<!-- 총 멤버 회원 수 조회 count() -->
+	<select id="memberCount" resultType="java.lang.Integer">
+	   SELECT COUNT(*) AS COUNT
+	   FROM TBL_MEM_JOIN
+	</select>
+	
+	<!-- 로그인 -->
+	<select id="memberLogin" resultType="com.sys.comeit.dto.MemberDTO">
+	      SELECT NAME, MEM_CD
+	      FROM TBL_MEM_JOIN
+	      WHERE MEM_ID=#{id}
+	      AND PWD=CRYPTPACK.ENCRYPT(#{pwd},#{pwd})
+	</select>
+	
+	
+	<!-- 로그인시 조회될 정지여부 -->
+	<select id="memStop" resultType="java.lang.String">
+	   SELECT STOP_DATE
+	   FROM VIEW_MEM_STOP
+	   WHERE ID = #{id}
+	</select>
+	
+	<!-- 블락회원 조회 -->
+	<select id="memBlock" resultType="java.lang.Integer">
+	   SELECT COUNT(*) AS COUNT
+	   FROM VIEW_MEM_BLK
+	   WHERE ID = (SELECT ID
+	                 FROM VIEW_MEM_STOP
+	                 WHERE ID = #{id})
+	</select>
+	
+	    
+	<!-- 일반 회원 id 찾기 -->
+	<select id="memId" resultType="java.lang.String">
+	   SELECT MEM_ID
+	   FROM TBL_MEM_JOIN
+	   WHERE NAME=#{name}
+	   AND TEL=#{tel}
+	</select>
+	
+	<!-- 일반 회원 가입 public int memberAdd(MemberDTO dto); -->
+	<select id="memberAdd" parameterType="com.sys.comeit.dto.MemberDTO" statementType="CALLABLE">
+	   { CALL PRC_MEM_JOIN
+	      (
+	         #{id}
+	         , #{name}
+	         , #{email}
+	         , #{tel}
+	         , #{pwd}
+	         , #{idntt_cd}
+	         , #{img_url, jdbcType=VARCHAR}
+	         , #{mem_content, jdbcType=VARCHAR}
+	         , #{spc_area_cd}
+	         , #{mem_cd, mode=OUT, jdbcType=VARCHAR}
+	      )
+	   }
+	</select>
+	
+	<!-- 일반 회원 pwd 찾기 비밀번호 변경 -->
+	<update id="memPwd">
+		UPDATE TBL_MEM_JOIN
+		SET PWD=CRYPTPACK.ENCRYPT(#{pwd},#{pwd})
+		WHERE TEL=#{tel} 
+	</update>
+	
+	<!-- 일반 회원 pwd 찾기 정보 조회 -->
+	<select id="pwdInfo" resultType="java.lang.Integer" >
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_MEM_JOIN
+		WHERE MEM_ID = #{id}
+		AND NAME=#{name}
+		AND TEL=#{tel} 
+	</select>
+	
+	<!-- 입력받은 아이디와 일치하는 회원 수 조회 memcheckCount() -->
+	<select resultType="java.lang.Integer" id="memcheckCount">
+	   SELECT COUNT(*) AS COUNT
+	   FROM TBL_MEM_JOIN
+	   WHERE MEM_ID = #{id} 
+	</select>
+	
+	<!-- 전화번호가 같은 회원 수 조회 memTelcheckCount() -->
+    <select resultType="java.lang.Integer" id="memTelcheckCount">
+       SELECT COUNT(*) AS COUNT
+       FROM TBL_MEM_JOIN
+       WHERE TEL = #{tel} 
+    </select>
+   
+	<!-- 회원 관심 키워드 -->
+	<insert id="memIntTagInsert">
+		INSERT INTO TBL_MEM_INT_TAG(MEM_INT_TAG_CD, MEM_CD, INT_TAG_CD)
+		VALUES('MEIT'||SEQ_MEM_INT_TAG.NEXTVAL, #{mem_cd}, #{int_tag})
+	</insert>
+	
+	<!-- 회원 관심 기타 키워드 -->
+	<insert id="memEtcTagInsert">
+		INSERT INTO TBL_MEM_INT_ETC_TAG(MEM_INT_ETC_TAG_CD, MEM_CD, ETC_TAG)
+		VALUES('MEIET'||SEQ_MEM_INT_ETC_TAG.NEXTVAL, #{mem_cd}, #{etc_tag})
+	</insert>
+	
+	<!-- 회원 가입 기타 키워드 테이블 호출해서 10개인지 체크 -->
+	<select id="etcTagCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_MEM_INT_ETC_TAG
+		WHERE ETC_TAG=#{etc_tag}
+	</select>
+	
+	<!-- 관심 키워드에 INSERT -->
+	<insert id="addTagName">
+		INSERT INTO TBL_INT_TAG(INT_TAG_CD, INT_TAG)
+		VALUES('INT'||SEQ_INT_TAG.NEXTVAL, #{etc_tag})
+	</insert>
+	
+	
+	<!-- 체크 해보기 -->
+	
+	
+	<!-- 스터디 평가 내역 -->
+	<select id="studyEval" resultType="com.sys.comeit.dto.MemberDTO">
+	  <![CDATA[
+      	SELECT SUM(SINCERITY)/COUNT(*) AS SINCERITY, SUM(EMBRACE)/COUNT(*) AS EMBRACE
+		, SUM(COMMUNICATION)/COUNT(*) AS COMMUNICATION, SUM(SKILL)/COUNT(*) AS SKILL
+		, SUM(LEADERSHIP)/COUNT(*) AS LEADERSHIP
+		FROM VIEW_STU_EVAL
+		WHERE MEM_CD = #{mem_cd}
+		GROUP BY ID
+      ]]>
+	</select>
+	
+	
+	<!-- 패널티 개수 -->
+	<select id="pnltCount" resultType="java.lang.Integer">
+		<![CDATA[
+      	SELECT COUNT(*) AS PNLT_CNT
+		FROM TBL_MEM_PNLT
+		WHERE MEM_CD = #{mem_cd}
+       ]]>
+	</select>
+	
+	
+	<!-- 멤버별 정보 조회 list() 마이페이지, 모달 사용 -->
+	<select id="memModalList" resultType="com.sys.comeit.dto.MemberDTO">
+	   SELECT NAME, IDNTT, MEM_CONTENT, EMAIL, TEL, AREA_NAME, SPC_AREA_NAME, IMG_URL, PWD
+	   FROM VIEW_MEM_MY
+	   WHERE MEM_CD = #{mem_cd}
+	</select>
+	
+	<!-- 멤버 관심,기타 키워드 -->
+	<select id="memIntTagSearch" resultType="com.sys.comeit.dto.MemberDTO">
+		SELECT INT_TAG
+		FROM
+		(
+		SELECT MEM_CD, ID, INT_TAG
+		FROM VIEW_MEM_INTTAG
+		UNION ALL
+		SELECT MEM_CD, ID, ETC_TAG
+		FROM VIEW_MEM_ETCTAG
+		)
+		WHERE MEM_CD = #{mem_cd}
+	</select>
+	
+	<!-- 멤버 참여 스터디 -->
+	<!-- 참여중인 스터디방 조회 -->
+   <select id="modalStudyList" resultType="com.sys.comeit.dto.MemberDTO">
+    <![CDATA[
+     SELECT STU_TITLE AS JOIN_STU_TITLE
+      FROM VIEW_MY_STU
+      WHERE END_DATE > SYSDATE
+       AND MEM_CD = #{mem_cd}
+       ]]>
+   </select>
+   
+   <!-- 재민 추가 -->
+	<!-- 강의 결제를 위한 특정 멤버 전화번호, 이메일 가져오기 -->
+   	<select id="memPayInfo" parameterType="java.lang.String" resultType="com.sys.comeit.dto.MemberDTO">
+   		SELECT NAME, EMAIL, TEL
+   		FROM TBL_MEM_JOIN
+   		WHERE MEM_CD = #{mem_cd}
+   	</select>
+	
+</mapper>

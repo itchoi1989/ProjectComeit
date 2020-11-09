@@ -1,0 +1,181 @@
+@charset "UTF-8";
+
+.dateSel , .meetSel
+{
+	width: 200px;
+	height: 36px;
+}
+
+.col-md-8 > .date,.col-md-8 > .meet
+, .box2 > .time , .box2 > .location
+, .mem > .memImg , .mem > .memName , .mem > .memAtten
+, .memAtten > .answer1 , .memAtten > .answer2
+, .button > .mod , .button > .del , .button > .upload
+{
+	display: inline-block;
+}
+
+h1
+{
+	font-weight: bold;
+}
+
+#col-md-88
+{
+	margin-top: 10px;
+	text-align: center;
+}
+
+.box1
+{
+	background-color: #f0f0f5;
+	border-radius: 20px;
+	text-align: center;
+}
+
+.box2 
+{
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+
+.time
+{
+	margin-right: 50px;
+}
+
+.date
+{
+	margin-right: 20px;
+}
+
+.profileImg
+{
+	width: 80px;
+	height: 80px;
+}
+
+.name
+{
+	font-weight: bold;
+	font-size: 20pt;
+	padding-left: 10px;
+}
+
+
+.mem
+{
+	margin-top: 30px;
+}
+
+.memAtten
+{
+	margin-left: 200px;
+}
+
+.yes , .no
+{
+	font-weight: bold;
+	font-size: 20pt;
+}
+
+.attendance
+{
+	width: 25px;
+	height: 25px;
+}
+
+.answer2
+{
+	margin-left: 90px;
+}
+
+.blank
+{
+	margin: 40px;
+}
+
+.mod , .del
+{
+	text-align: left;
+}
+
+/* 모달창 관련 css */
+
+.search-modal-content > .userInt,
+.search-modal-content > .userStu,
+.search-modal-content > .userPro
+{
+	margin-bottom: 15px;
+}
+
+.closeD > .modalCloseBtn
+{
+	font-size: 13pt;
+}
+
+.searchModal 
+{
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 10; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.search-modal-content > .userName ,
+.search-modal-content > .userManner ,
+.search-modal-content > .userPosi ,
+.search-modal-content > .userKey ,
+.search-modal-content > .userInt ,
+.search-modal-content > .userStu ,
+.search-modal-content > .userPro 
+{
+	text-align: left;
+}
+
+	/* Modal Content/Box */
+.search-modal-content 
+{
+	background-color: #fefefe;
+	margin: 15% auto; /* 15% from the top and centered */
+/* 	padding: 20px; */
+	padding-left: 30px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	border: 1px solid #888;
+	width: 400px; /* Could be more or less, depending on screen size */
+	height: 550px;
+	border-radius: 15px;
+	z-index: 11;
+}
+
+.search-modal-content > .out
+{
+	text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

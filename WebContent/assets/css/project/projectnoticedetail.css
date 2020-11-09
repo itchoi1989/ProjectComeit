@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+.detail th
+{
+	text-align: center;
+	background-color: #EEEEEE;
+}
+.tit
+{
+	text-align: center;
+}
+.content
+{
+	vertical-align: top;
+	height: 400px;
+}
+.repBtn
+{
+	text-align: right;
+}
+.reList
+{
+	margin-top: 20px;
+}
+.btns .leftBtn, .btns .rightBtn
+{
+	display: inline-block;
+}
+.btns .rightBtn
+{
+	float: right;
+}
+.reTop h4, .reTop h5, .reTop .repBtn
+{
+	display: inline-block;
+}
+.reTop .repBtn, .reTop .delBtn
+{
+	float: right;
+}
+.reTop h4
+{
+	margin-right: 20px;
+}
+.count
+{
+	font-weight: bold;
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+.re
+{
+	margin-top: 30px;
+}
+.reAdd th
+{
+	background-color: #EEEEEE;
+}
+.textArea .text, .textArea .addBtn
+{
+	display: inline-block;
+}
+.reAdd .reTh
+{
+	padding-top: 40px;
+	width: 200px;
+}
+.reAdd .addBtn
+{
+	padding-top: 20px;
+}

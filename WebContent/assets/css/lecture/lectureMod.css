@@ -1,0 +1,145 @@
+@charset "UTF-8";
+
+h1, h4 , .m
+{
+	font-weight: bold;
+}
+
+.ePoint
+{
+	color: red;
+}
+
+.titleErr, .contentErr
+{
+	margin: 10px;
+	color: red;
+	display: none;
+}
+
+
+.stuKeyword >.check
+{
+	padding-top: 10px;
+	float: right;
+}
+.stuKeyword > h4 , .stuKeyword > .check,
+.areaMemNum > h4 ,
+.stuKey >.stuKeySel , .stuKey > .stuKeyInput, .stuKey > .stuKeyBtn ,
+.areaMemNum > .area , .areaMemNum > .spcArea,
+.areaMemNum > .memNum , .period > h4, .period > .start , .period > .icon
+, .period > .termSel , .weekDay > .weekSel , .weekDay > .weekBtn, .weekDay > .weekBox
+, .level > h4 , .level > .levelSel , .scret > h4 , .scret > .scretBox,
+.levelScret > .level , .levelScret > .scret ,
+.position > h4 , .position > .posiSel , .posiImg > .position , .posiImg > .image,
+.button > .upload , .button > .cancel, .money > h4, .money > lecmoney
+{
+	display: inline-block;
+}
+
+.areaMemNum > h4 , .areaMemNum > h4 ,.period > h4 , .level > h4 , .weekSel > .weekBtn
+, .weekDay > .weekSel , .scret > h4 , .cancel
+{
+	margin-right: 8px;
+}
+
+ .money > h4
+{
+	margin-right: 26px;
+}
+
+.calBtn 
+{
+	margin-right: 95px;
+}
+
+.level , .posiSel
+{
+	margin-right: 130px;
+}
+
+.position > h4
+{
+	margin-right: 15px;
+}
+
+.spcArea , .weekBtn
+{
+	margin-right: 30px;
+}
+
+.keySelect , .area , .spcArea, .start , .termSel, .weekSel , .levelSel , .scretBox , .posiSel, .lecmoney
+{
+	width: 200px;
+	height: 36px;
+}
+
+.keyInput
+{
+	width: 600px;
+	height: 36px;
+}
+.stuKeyInput
+{
+	margin-bottom: 8px;
+}
+
+.stuKeyBox
+{
+	width: 990px;
+	height: 100px;
+	border: 1px solid #d9d9d9;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+.tagStyle 
+{
+	display : inline-block;
+	border: 1px solid #d9d9d9;
+	border-radius: 10px;
+	background-color: #D0DAEA;
+	margin-top: 5px;
+	margin-left: 5px;
+	color: black;
+}
+
+.weekBox
+{
+	width: 600px;
+	height: 36px;
+	border: 1px solid #d9d9d9;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+.tag_delete
+{
+	color: black;
+}
+
+.activityArea
+{
+	margin-top: 10px;
+}
+
+.memNum
+{
+	width: 100px;
+	height: 36px;
+}
+
+.stuKeyBox , .areaMemNum , .period , .levelScret, .money
+{
+	margin-bottom: 10px;
+}
+
+.posiImg , .button
+{
+	margin-bottom: 120px;
+}
+
+.button
+{
+	text-align: center;
+}

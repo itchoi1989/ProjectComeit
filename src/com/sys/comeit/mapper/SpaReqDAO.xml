@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.ISpaReqDAO">
+
+	<!-- 공간등록 -->
+	<select id="spaReqAdd" parameterType="com.sys.comeit.dto.SpaReqDTO" statementType="CALLABLE">
+	   { CALL PRC_SPA_REQ
+	      (
+	         #{spa_cd}
+	         , #{spa_type}
+	         , #{one_intro}
+	         , #{use_hrs}
+	         , #{rsv_notes}
+	         , #{str_time}
+	         , #{end_time}
+	         , #{dtl_intro}
+	         , #{busi_name}
+	         , #{spa_name}
+	         , #{dtl_addr}
+	         , #{tel}
+	         , #{rprsn_name}
+	         , #{dtl_addr}
+	         , #{rprsn_num}
+	         , #{file_url}
+	         , #{web_url, jdbcType=VARCHAR}
+	         , #{spc_area_cd}
+	         , #{spa_req_cd, mode=OUT, jdbcType=VARCHAR}
+	      )
+	   }
+	</select>
+	
+	<!-- 키워드 리스트 -->
+	<select id="spaTagList" resultType="com.sys.comeit.dto.SpaReqDTO">
+		SELECT SPA_TAG_TYPE_CD, TAG_NAME
+		FROM TBL_SPA_TAG_TYPE
+		ORDER BY SPA_TAG_TYPE_CD
+	</select>
+	
+	<!-- 관심 키워드에 INSERT -->
+	<insert id="spaAddTagName">
+		INSERT INTO TBL_SPA_TAG_TYPE(SPA_TAG_TYPE_CD, TAG_NAME)
+		VALUES('SPTGT'||SEQ_SPA_TAG_TYPE.NEXTVAL, #{etc_tag})
+	</insert>
+	
+	
+	<!-- 공간 키워드 -->
+	<insert id="spaIntTagInsert">
+		INSERT INTO TBL_SPA_TAG(SPA_TAG_CD, SPA_REQ_CD, SPA_TAG_TYPE_CD)
+		VALUES('SPTAG'||SEQ_SPA_TAG.NEXTVAL, #{spa_req_cd}, #{int_tag})
+	</insert>
+	
+	<!-- 공간 기타 키워드 -->
+	<insert id="spaEtcTagInsert">
+		INSERT INTO TBL_SPA_ETC_TAG(SPA_ETC_TAG_CD, SPA_REQ_CD, ETC_TAG)
+		VALUES('SPECT'||SEQ_SPA_ETC_TAG.NEXTVAL, #{spa_req_cd} , #{etc_tag})
+	</insert>
+	
+	<!-- 키워드 DELETE -->
+	<delete id="spaIntTagDel">
+		DELETE
+		FROM TBL_SPA_TAG
+		WHERE SPA_REQ_CD=#{spa_req_cd}
+	</delete>
+	
+	<!-- 기타 키워드 DELETE -->
+	<delete id="spaEtcTagDel">
+		DELETE
+		FROM TBL_SPA_ETC_TAG
+		WHERE SPA_REQ_CD=#{spa_req_cd}
+	</delete>
+	
+	<!-- 공간 가입 기타 키워드 테이블 호출해서 10개인지 체크 -->
+	<select id="spaEtcTagCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_SPA_ETC_TAG
+		WHERE ETC_TAG=#{etc_tag}
+	</select>
+	
+	<!-- 공간 이미지에 INSERT -->
+	<insert id="spaAddImg">
+		INSERT INTO TBL_SPA_IMG(SPA_IMG_CD, SPA_REQ_CD,IMG_TYPE_CD,IMG_URL)
+		VALUES('SPIMG'||SEQ_SPA_IMG.NEXTVAL, #{spa_req_cd},#{img_type_cd} , #{img_url})
+	</insert>
+	
+	<!-- 시설 안내 INSERT -->
+	<insert id="spaAddContent">
+		INSERT INTO TBL_FCLTY_INFO(FCLTY_INFO_CD, SPA_REQ_CD,CONTENT)
+		VALUES('FCINF'||SEQ_FCLTY_INFO.NEXTVAL, #{spa_req_cd},#{content})
+	</insert>
+	
+	<!-- 시설안내 DELETE -->
+	<delete id="spaDelContent">
+		DELETE
+		FROM TBL_FCLTY_INFO
+		WHERE SPA_REQ_CD=#{spa_req_cd}
+	</delete>
+	<!-- 공간 수정 -->
+	<update id="spaReqModify">
+	     UPDATE TBL_SPA_REQ
+   		 SET ONE_INTRO=#{one_intro} ,USE_HRS=#{use_hrs} ,RSV_NOTES=#{rsv_notes} ,STR_TIME=#{str_time} ,END_TIME=#{end_time} ,DTL_INTRO=#{dtl_intro}, BUSI_NAME=#{busi_name} ,SPA_NAME=#{spa_name} ,TEL=#{tel} ,RPRSN_NAME=#{rprsn_name}
+    	WHERE SPA_REQ_CD=#{spa_req_cd}
+	</update>
+   
+</mapper>

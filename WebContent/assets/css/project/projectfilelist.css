@@ -1,0 +1,50 @@
+@charset "UTF-8";
+.paging
+{
+	text-align: center;
+}
+.pagination>li>a, .pagination>li>span
+{
+	color: black;
+}
+
+.add
+{
+	margin-top: 15px;
+}
+
+.searchRow
+{
+	margin-bottom: 30px;
+}
+
+.col-md-8 > .searchSel,
+.col-md-8 > .search
+{
+	margin-top: 15px;
+}
+
+.col-md-8 > .searchSel
+{
+	width: 200px;
+	height: 40px;
+	margin-right: 20px;
+}
+
+.col-md-8 > .searchBox
+{
+	width: 600px;
+	height: 40px;
+}
+
+.col-md-8 > .searchSel ,.col-md-8 > .searchBox
+, .col-md-8 > .search
+{
+	display: inline-block;
+}
+
+.col-md-8
+{
+	text-align: center;
+}
+

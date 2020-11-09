@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.ILevelDAO">
+
+	<select id="levelList" resultType="com.sys.comeit.dto.LevelDTO">
+		SELECT LV_CD, LV 
+		FROM TBL_LV
+		ORDER BY LV_CD
+	</select>
+	
+</mapper>

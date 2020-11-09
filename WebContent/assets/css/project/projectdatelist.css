@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+.dateSel , .meetSel
+{
+	width: 200px;
+	height: 36px;
+}
+
+.col-md-8 > .date,.col-md-8 > .meet
+, .box2 > .time , .box2 > .location
+, .mem > .memImg , .mem > .memName , .mem > .memAtten
+, .memAtten > .answer1 , .memAtten > .answer2
+, .button > .mod , .button > .del , .button > .upload
+{
+	display: inline-block;
+}
+
+h1
+{
+	font-weight: bold;
+}
+
+.col-md-8
+{
+	margin-top: 10px;
+	text-align: center;
+}
+
+.box1
+{
+	background-color: #f0f0f5;
+	border-radius: 20px;
+	text-align: center;
+}
+
+.box2 
+{
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+
+.time
+{
+	margin-right: 50px;
+}
+
+.date
+{
+	margin-right: 20px;
+}
+
+.profileImg
+{
+	width: 80px;
+	height: 80px;
+}
+
+.name
+{
+	font-weight: bold;
+	font-size: 20pt;
+	padding-left: 10px;
+}
+
+
+.mem
+{
+	margin-top: 30px;
+}
+
+.memAtten
+{
+	margin-left: 200px;
+}
+
+.yes , .no
+{
+	font-weight: bold;
+	font-size: 20pt;
+}
+
+.attendance
+{
+	width: 25px;
+	height: 25px;
+}
+
+.answer2
+{
+	margin-left: 90px;
+}
+
+.blank
+{
+	margin: 40px;
+}
+
+.mod , .del
+{
+	text-align: left;
+}
+

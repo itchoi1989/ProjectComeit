@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IMeetTermDAO">
+
+	<select id="meetTermList" resultType="com.sys.comeit.dto.MeetTermDTO">
+		SELECT MEET_TERM_CD, MEET_TERM
+		FROM TBL_MEET_TERM
+		ORDER BY MEET_TERM_CD
+	</select>
+	
+</mapper>

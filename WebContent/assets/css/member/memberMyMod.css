@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+html, body
+{
+   overflow-x:hidden;
+   overflow-y:auto;
+}
+
+.proImg
+{
+	width: 200px;
+	height: 200px;
+}
+
+.img, .info, .infoDet , .nameDiv , .emailDiv , .passDiv
+, .telDiv , .iddtDiv , .areaDiv  , .keyDiv , .intDiv
+{
+	margin-top: 50px;
+}
+
+.col-md-4 > h3 , .col-md-2 > h2 , .col-md-8 > h3
+{
+	font-weight: bold;
+}
+
+.ePoint
+{
+	color: red;
+}
+
+.nameDiv >.nameInput , .emailDiv > .emailInput
+, .passDiv > .passInput , .iddtDiv > .iddt , .stuKeySel >.keySelect
+{
+	width: 300px;
+	height: 45px;
+}
+
+.stuKeyInput > .keyInput
+{
+	width: 600px;
+	height: 45px;
+}
+
+.telDiv > .tel1 , .telDiv > .tel2 , .telDiv > .tel3
+{
+	width: 120px;
+	height: 45px;
+	display: inline-block;
+	
+}
+
+.areaDiv > .area1 , .areaDiv > .area2
+{
+	width: 160px;
+	height: 45px;
+	display: inline-block;
+}
+
+.keyDiv >.stuKeySel, .keyDiv > .stuKeyInput, .keyDiv > .stuKeyBtn
+{
+	display: inline-block;
+}
+
+.stuKeyBox ,.intDiv >.myInt
+{
+	width: 990px;
+	height: 100px;
+	border: 1px solid #d9d9d9;
+	border-radius: 5px;
+}
+
+.tagStyle 
+{
+	display : inline-block;
+	border: 1px solid #d9d9d9;
+	border-radius: 10px;
+	background-color: #D0DAEA;
+	margin-top: 5px;
+	margin-left: 5px;
+	color: black;
+}
+
+.tag_delete
+{
+	color: black;
+}
+
+.stuKeyBox 
+{
+	margin-top: 10px;
+}
+
+
+.col-md-8 > .modBtn
+{
+	margin-top: 50px;
+	text-align: center;
+	margin-bottom: 50px;
+}

@@ -1,0 +1,26 @@
+@charset "UTF-8";
+
+.col-md-8 > .paging , .paging > .pagination, .container-fluid 
+{
+	text-align: center;
+}
+.paging>ul >li>a, .paging>ul>li>span
+{
+	color: black;
+}
+
+.col-md-8 > .add
+{
+	text-align: right;
+}
+
+.col-md-8 > .paging , .col-md-8 > .button
+{
+	display: inline-block;
+}
+
+.detail > th
+{
+	text-align: center;
+}
+

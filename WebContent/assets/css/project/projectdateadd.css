@@ -1,0 +1,86 @@
+@charset "UTF-8";
+
+.dateInfo > h1
+{
+	text-align: center;
+}
+
+.dateInfo > h1 , .meetDate> h3 , .meetLoc > h3
+, .meetTime > h3
+{
+	font-weight: bold;
+}
+
+.meetDate > .meetDateInput
+, .meetLoc > .locSel , .meetLoc > .locSel2
+{
+	width: 300px;
+	height: 36px;
+	margin-left: 30px;
+}
+
+.meetTime > .timeSel1, .meetTime > .timeSel2, .meetTime > .timeSel3
+{
+	width: 200px;
+	height: 36px;
+	margin-left: 30px;
+}
+
+.meetDate , .meetLoc , .meetTime
+{
+	margin-left: 50px;
+	margin-top: 30px;
+}
+
+.ePoint
+{
+	color: red;
+}
+
+.box 
+{
+	background-color: #f0f0f5;
+	border-radius: 20px;
+	text-align: center;
+}
+
+.meetLoc > .locInput
+{
+	width: 630px;
+	height: 36px;
+	text-align: center;
+	margin-left:920px;
+	margin-right: 10px; 
+	margin-top: 5px;
+	
+}
+
+ 
+.btnbox
+{
+	margin-top: 20px;
+	text-align: right;
+}
+
+.meetDate > h3 , .meetDate > .meetDateInput,
+.meetLoc > h3, .meetLoc > .locSel , .meetLoc > .locSel2
+, .meetTime > h3, .meetTime > .timeSel1, .meetTime > .timeSel2, .meetTime > .timeSel3
+{
+	display: inline-block;
+}
+
+.col-md-8 > .errMsg
+{
+	color: red;
+	margin-top: 20px;
+	text-align: right;
+	font-weight: bold;
+	/* display: none;  */
+}
+
+
+
+.box > .blank
+{
+	margin: 100px;
+}

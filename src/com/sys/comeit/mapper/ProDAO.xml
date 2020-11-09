@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IProDAO">
+
+	<!-- 강사 목록을 불러오는 쿼리문 -->
+	<select id="proList" resultType="com.sys.comeit.dto.ProDTO">
+		SELECT PROF_CD, MEM_CD, BANK_CD, CAREER, CRT_DATE, ACNT_NUM
+		FROM TBL_PROF
+	</select>
+	
+	<!-- <select id="getProfcd" resultType="java.lang.String">
+		SELECT PROF_CD
+		FROM TBL_PROF
+		WHERE MEM_CD = #{mem_cd}
+	</select> -->
+	
+	<!-- 특정 강사의 정보를 가져오는 쿼리문 -->
+	<select id="profInfo" resultType="com.sys.comeit.dto.ProDTO">
+		SELECT NAME, IMG_URL, CAREER, PROF_INTRO, MEM_CD
+		FROM VIEW_PROF_INFO
+		WHERE MEM_CD = #{mem_cd}
+	</select>
+	
+	<!-- 로그인 한 회원이 강사회원인지 아닌지 판단하는 쿼리문 -->
+	<!-- 강사 회원이면 강의 개설 가능, 강사 회원이 아니면 강의 개설 불가 -->
+	<select id="lecCreateCheck" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_PROF
+		WHERE MEM_CD = #{mem_cd}
+	</select>
+	
+	<!-- 회원의 강사코드를 가져오는 쿼리문 -->
+	<select id="lecCreateCheck2" resultType="java.lang.String">
+		SELECT PROF_CD
+		FROM TBL_PROF
+		WHERE MEM_CD = #{mem_cd}
+	</select>
+		
+</mapper>

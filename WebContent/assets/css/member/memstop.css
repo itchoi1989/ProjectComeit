@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+
+.container-fluid
+{
+	margin-top: 10%;
+}
+.glyphicon-ban-circle
+{
+	color: #cc0000;
+	font-size: 300pt;
+
+}
+.stopContent
+{
+	font-size: 30pt;
+	float: center;
+	font-weight: bold;
+	color: #183350;
+	margin: auto;
+}
+.stopImg
+{
+	display: inline-block;
+	margin: 2px;
+    max-width: 20rem;
+    max-height: 20rem;
+    margin-top: 10%;
+    margin-left: 5%;
+    margin-right: 70px;
+    margin-bottom: 10%;
+}
+.cont
+{
+	border-radius: 10px;
+	/* background-color: #ecf2f9; */
+}
+.reqBtn
+{
+	float: right;
+	margin-top: 3%;
+}
+.head .mTit, .head .xBtn
+{
+	display: inline-block;
+}
+.head .mTit
+{
+	font-weight: bold;
+	font-size: 16pt;
+}
+.head .xBtn
+{
+	float: right;
+}

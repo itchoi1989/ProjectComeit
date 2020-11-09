@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+.stuTitle > h1 , .stuTitle > .report
+{
+	display: inline-block;
+}
+
+.stuTitle > .row > .col-md-2 >.report
+{
+	margin-left: 10px;
+	width: 30px;
+	height: 30px;
+}
+
+ 
+.stuImg
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	/* width: 1375px;
+	height: 200px; */
+	border-radius: 10px;
+	width: 100%;
+}
+
+.stuTitle
+{
+	margin-bottom: 40px;
+}
+
+.stuMem
+{
+	margin-top: 120px;
+}
+
+
+.stuTitle > h2 , .stuArea > h3 , .stuMem > h3 , .memLeader > h4
+, .member > h4 , .stuTerm > .lecIntro , .stuKey > h3 , .stuLevel > h3
+, .stuCurr > h3, .lecMoney > h3
+{
+	font-weight: bold;
+}
+
+.report
+{
+	margin-left: 200px;
+}
+
+.stuTitle > .join 
+{
+	margin-left: 650px; 
+	/* align: right */
+}
+
+
+.term ,.day, .area, .keword , .level , .curr
+, .name , .manPencil , .position , .keyword ,.oneInt
+, .joinStu ,.joinPro , .stuTerm > .icon
+, .stuArea > .icon , .stuKey > .icon
+, .stuLevel > .icon , .stuCurr > .icon
+, .lecMoney > .icon
+{
+	font-size: 17pt;
+}
+
+.col-md-4
+{
+	border: 1px;
+	border-color: black;
+}
+
+.memImg
+{
+	width: 80px;
+}
+
+.name
+{
+	margin-left: 30px;
+}
+
+.memLeader , .member
+{
+	margin-bottom: 20px;
+}
+
+.userName > h3, .userName > .name
+.userManner > .glyphicon ,.userManner > h3, .userManner > .pencil
+, .userPosi > h3 , .userPosi > .position , .userKey > h3 , .userKey > .keyword
+, .memLeader > img, .memLeader > h4
+, .member > img , .member > h4
+, .stuTerm > .icon , .stuTerm > h3
+, .stuArea > .icon , .stuArea > h3
+, .stuKey > .icon , .stuKey > h3
+, .stuLevel > .icon , .stuLevel > h3
+, .stuCurr > .icon , .stuCurr > h3
+, .lecMoney > .icon, .lecMoney > h3
+{
+	display: inline-block;
+}
+
+.user , .pencil ,.ok
+{
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+.name , .manPencil , .position , .keyword
+{
+	margin-left: 10px;
+}
+
+.icon
+{
+	margin-right: 10px;
+}
+
+.memLeader > .memInfo , .member > .memInfo
+{
+	width: 400px;
+	height: 570px;
+	border: 1px solid #e9e9e9;
+	padding-left: 20px;
+	background-color: #E6E6E6;
+	border-radius: 10px;
+	position: relative;	
+	display: none;
+}
+
+.stuMem > .memLeader
+{
+	padding-top: 20px;
+	padding-left:10px;
+	width: 360px;
+	height: 100px;
+	/* border: 1px solid #e9e9e9; */
+	border-radius: 10px;
+	background-color: #FAFAFA;
+	/* background: linear-gradient( to bottom, #E1B283, white ); */
+	/* font-family: Nanum Gothic; */
+}
+
+.stuMem > .member
+{
+	padding-top: 10px;
+	padding-left:10px;
+	width: 360px;
+	height: 100px;
+	/* border: 1px solid #e9e9e9; */
+	border-radius: 10px;
+	background-color: #FAFAFA;
+	/* background: linear-gradient( to bottom, #E1B283, white ); */
+	/* font-family: Nanum Gothic; */
+}
+
+.member > h4
+{
+	margin-left: 10px;
+}

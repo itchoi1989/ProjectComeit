@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+.voteIngTitle .title
+{
+	font-size: 20pt;
+	font-weight: bold;
+	color: #183350;
+}
+.voteIng
+{
+	border: 0;
+	border-radius: 20px;
+	padding: 2%;
+	margin: 2%;
+	background-color: #eeeeee;
+}
+.voteIng .voteMem, .voteIng .voteRsn
+{
+	text-align: center;
+}
+.voteIng .voteMem, .voteIng .voteRsn
+{
+	font-size: 16pt;
+	margin: 0.5%;
+}
+.voteIng .voteDate
+{
+	font-size: 16pt;
+	margin-bottom: 3%;
+}
+.icon
+{
+	margin-right: 2%;
+}
+.myVote
+{
+	width: 30%;
+	text-align: center;
+	font-size: 16pt;
+	font-weight: bold;
+}
+.myName
+{
+	margin-right: 3%;
+}
+.myVote .rad
+{
+	font-weight: bold;
+}
+.selectVote
+{
+	text-align: center;
+}
+.selectVote .myVote, .selectVote .changeBtn
+{
+	display: inline-block;
+}
+.voteResult
+{
+	text-align: center;
+	font-size: 16pt;
+	font-weight: bold;
+	
+}
+.voteResult .agree
+{
+	margin-right: 5%;
+}
+.voteResult .vRslt
+{
+	margin-top: 5%;
+	color: #cc0000;
+}

@@ -1,0 +1,112 @@
+@charset "UTF-8";
+.myInfoDiv .infoTable
+{
+	padding: 5%;
+}
+.stuPro, .myLec, .myPay, .mySpa
+{
+	padding-left: 5%;
+	padding-right: 5%;
+}
+body .padding
+{
+	padding-top: 60px;
+}
+.row
+{
+	margin-bottom: 2%
+}
+.img
+{
+	text-align: center;
+}
+.img .myimg 
+{
+	display: inline-block;
+	margin: 2px;
+    max-width: 20rem;
+    max-height: 20rem;
+    margin-top: 10%;
+    margin-left: 10%;
+}
+
+/* .myInfo
+{
+	margin-top: 5%;	
+	margin-bottom: 10%;
+	margin-right: 10%;
+} */
+
+.list-my-tags {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0 0;
+}
+.list-my-tags .stack-item {
+    font-size: 14px;
+    line-height: 1.5;
+    display: inline-block;
+    margin: 0 0.25rem 0.25rem 0;
+    padding: 0.1875rem 0.5rem;
+    vertical-align: top;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    color: #44576C;
+    background-color: #E9ECF3;
+}
+.head .tit
+{
+	font-size: 20px;
+	font-weight: bold;
+}
+.myStu th, .myPro th
+{
+	font-weight: bold;
+	font-size: 15px;
+	text-align: center;
+}
+.detail td
+{
+	text-align: center;
+	vertical-align: middle;
+}
+.detail .deTit
+{
+	text-align: left;
+	vertical-align: middle;
+}
+.myModi
+{
+	margin-top: 20px;
+	position: relative;
+}
+.myModiBtn
+{
+	position: absolute;
+	bottom: 0;
+	right: 0;	
+}
+.head .mTit, .head .xBtn
+{
+	display: inline-block;
+}
+.head .mTit
+{
+	font-weight: bold;
+	font-size: 16pt;
+}
+.head .xBtn
+{
+	float: right;
+}
+.mbody .rsnTit
+{
+	text-align: left;
+	font-weight: bold;
+	font-size: 14pt;
+	margin-bottom: 1%;
+}
+.content
+{
+	margin-bottom: 2%;
+}

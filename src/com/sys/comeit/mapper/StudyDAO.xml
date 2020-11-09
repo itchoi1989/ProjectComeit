@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IStudyDAO">
+
+    <!-- 스터디방 정보 조회 -->
+	<select id="studyInfoSearch"
+		resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT DISTINCT STU_CD,CRT_DATE ,TITLE,STR_DATE,MEM_NUM, CONTENT, CMT_DATE, AREA_NAME, SPC_AREA_NAME
+		, MEET_TERM, IDNTT_TYPE, LV, CAT_NAME, SCRT_NUM, CRT_MEM_CD, END_DATE, MEM_NUM
+		FROM VIEW_STU_INFO
+		WHERE STU_CD=#{stu_cd}
+	</select>
+
+	<!-- 스터디방 관심 태그 조회 -->
+	<select id="studyIntTagSearch"
+		resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT INT_TAG AS INT_TAG_NAME
+		FROM VIEW_STU_TAG
+		WHERE STU_CD = #{stu_cd}
+	</select>
+	
+	<!-- 스터디방 기타 관심 태그 조회 -->
+	<select id="studyEtcTagSearch"
+		resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT ETC_TAG AS ETC_TAG_NAME
+		FROM VIEW_STU_ETC_TAG
+		WHERE STU_CD = #{stu_cd}
+	</select>
+	
+	<!-- 스터디 진행 요일 조회 -->
+	<select id="studyDaySearch" 
+		resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT D.DAY_NAME AS STU_DAY_NAME
+		FROM TBL_STU_PRG_DAY SD, TBL_DAY D
+		WHERE SD.DAY_CD = D.DAY_CD
+		  AND SD.STU_CD=#{stu_cd}
+	</select>
+	
+	<!-- 스터디장 조회 -->
+	<select id="studyLeaderSearch" resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT DISTINCT LEADER_NAME, LEADER_MEM_CD
+		FROM VIEW_STU_INFO
+		WHERE STU_CD = #{stu_cd}
+		  AND APNTM_DATE = (
+		                    SELECT MAX(APNTM_DATE)
+		                    FROM VIEW_STU_INFO
+		                    WHERE STU_CD =#{stu_cd}
+                    		)
+	</select>
+	
+	<!-- 스터디원 조회 -->
+	<select id="studyJoinName" 
+	resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT NAME AS STU_JOIN_NAME, MEM_CD AS JOIN_MEM_CD
+		FROM VIEW_MY_STU
+		WHERE STU_CD = #{stu_cd}
+		  AND EXT_NAME IS NULL
+	</select>
+	
+	<!-- 스터디장/원 이미지 조회 -->
+	<select id="memImgSearch" resultType="com.sys.comeit.dto.StudyDTO">
+		SELECT MJ.MEM_CD AS JOIN_MEM_CD, MI.IMG_URL AS MEM_IMG
+		FROM TBL_MEM_IMG MI, TBL_MEM_JOIN MJ, TBL_STU_JOIN SJ
+		WHERE MJ.MEM_ID = MI.MEM_ID
+		  AND MJ.MEM_CD = SJ.MEM_CD
+		AND SJ.STU_CD = (SELECT DISTINCT STU_CD
+		                 FROM VIEW_MY_STU
+		                 WHERE STU_CD = #{stu_cd}
+		                   AND EXT_NAME IS NULL)
+	</select>
+	
+	<!-- 스터디방 참여 여부 -->
+	<select id="stuJoinMemSearch" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VIEW_MY_STU
+		WHERE MEM_CD = #{join_mem_cd}
+  		  AND STU_CD = #{stu_cd}
+  		  AND EXT_NAME IS NULL
+	</select>	
+   
+   <!-- 전체 참가중인 스터디원 조회 -->
+   <select id="joinMemNum" resultType="java.lang.Integer">
+	   	SELECT COUNT(*) AS COUNT
+		FROM TBL_STU_JOIN SJ, TBL_STU_EXT SE
+		WHERE SJ.STU_JOIN_CD = SE.STU_JOIN_CD(+)
+		  AND EXT_DATE IS NULL
+		  AND STU_CD = #{stu_cd}
+   </select>
+   
+   <!-- 스터디 참가  -->
+   <insert id="joinStudy">
+	   	INSERT INTO TBL_STU_JOIN(STU_JOIN_CD, STU_CD, MEM_CD, JOIN_DATE) 
+		VALUES('STJOI'||SEQ_STU_JOIN.NEXTVAL, #{stu_cd}, #{join_mem_cd}, SYSDATE)
+   </insert>
+   
+   <!-- 스터디 커밋 -->
+   <update id="studyCommit">
+   		UPDATE TBL_STU
+		SET CMT_DATE = SYSDATE
+		WHERE STU_CD = #{stu_cd} 
+   </update>
+   
+   
+   <!-- 스터디방 삭제 -->
+   <delete id="studyDelete">
+   		DELETE
+		FROM TBL_STU
+		WHERE STU_CD = #{stu_cd}
+   </delete>
+   
+   
+   
+   <!-- 수진 추가 -->
+   <!-- 전체 스터디방 조회 -->
+   <!-- 전체 스터디방 조회 -->
+   <select id="studyList" resultType="com.sys.comeit.dto.StudyDTO">
+      SELECT STU_CD, CRT_DATE, TITLE, STR_DATE, MEM_NUM, CMT_DATE, AREA_NAME, SPC_AREA_NAME, MEET_TERM, IDNTT_TYPE, LV, CAT_NAME, SCRT_NUM, END_DATE, IMG_URL
+      FROM VIEW_STU_LIST
+      WHERE END_DATE <![CDATA[>]]> SYSDATE
+      ORDER BY STU_CD DESC
+   </select>
+   
+   <!-- 전체 스터디방 개수 조회 -->
+   <!-- 총 스터디방 개수 조회 count() -->
+   <select id="studyCount" resultType="java.lang.Integer">
+      SELECT COUNT(*) AS COUNT
+      FROM VIEW_STU_LIST
+      WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+   </select>
+   
+   <!-- 모든 스터디방의 관심 키워드 -->
+   <select id="studyTagList" resultType="com.sys.comeit.dto.StudyDTO">
+      	SELECT STU_CD, INT_TAG AS INT_TAG_NAME
+		FROM 
+		(
+		SELECT STU_CD, INT_TAG, STR_DATE, END_DATE
+		FROM VIEW_STU_TAG
+		UNION ALL
+		SELECT STU_CD, ETC_TAG, STR_DATE, END_DATE
+		FROM VIEW_STU_ETC_TAG
+		)
+		WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+   </select>
+   
+   <!-- 스터디방의 비밀번호 확인 -->
+   <select id="studyScrt" resultType="java.lang.String">
+      SELECT SCRT_NUM
+      FROM VIEW_STU_LIST
+      WHERE STU_CD = #{stu_cd}
+   </select>
+   
+   <!-- 스터디 개설 -->
+   <select id="studyInsert" parameterType="com.sys.comeit.dto.StudyDTO" statementType="CALLABLE">
+      { CALL PRC_STU_CREATE
+         (
+            #{crt_mem_cd}
+            , #{spc_area_cd}
+            , #{meet_term_cd}
+            , #{idntt_cd}
+            , #{lv_cd}
+            , #{stu_cat_cd}
+            , #{title}
+            , #{str_date}
+            , #{mem_num}
+            , #{content}
+            , #{img_url, jdbcType=VARCHAR}
+            , #{scrt_num, jdbcType=CHAR}
+            , #{stu_cd, mode=OUT, jdbcType=VARCHAR}
+         )
+      }
+   </select>
+   
+   <!-- 스터디 관심 키워드 -->
+   <insert id="studyIntTagInsert">
+      INSERT INTO TBL_STU_INT_TAG(STU_INT_TAG_CD, STU_CD, INT_TAG_CD)
+      VALUES('STITG'||SEQ_STU_INT_TAG.NEXTVAL, #{stu_cd}, #{int_tag_cd})
+   </insert>
+   
+   <!-- 스터디 관심 기타 키워드 -->
+   <insert id="studyEtcTagInsert">
+      INSERT INTO TBL_STU_INT_ETC_TAG(STU_INT_ETC_TAG_CD, STU_CD, ETC_TAG)
+      VALUES('STIET'||SEQ_STU_INT_ETC_TAG.NEXTVAL, #{stu_cd}, #{etc_tag_cd})
+   </insert>
+   
+   <!-- 스터디 관심 기타 키워드 테이블 호출해서 10개인지 체크 -->
+   <select id="studyEtcTagCount" resultType="java.lang.Integer">
+      SELECT COUNT(*) AS COUNT
+      FROM TBL_STU_INT_ETC_TAG
+      WHERE ETC_TAG=#{etc_tag_name}
+   </select>
+   
+   <!-- 관심 키워드에 INSERT -->
+   <insert id="addTagName">
+      INSERT INTO TBL_INT_TAG(INT_TAG_CD, INT_TAG)
+      VALUES('INT'||SEQ_INT_TAG.NEXTVAL, #{etc_tag_name})
+   </insert>
+   
+   <!-- 스터디 진행 요일 키워드 -->
+   <insert id="studyDayInsert">
+      INSERT INTO TBL_STU_PRG_DAY(STU_PRG_DAY_CD, STU_CD, DAY_CD)
+      VALUES('SPRDY'||SEQ_STU_PRG_DAY.NEXTVAL, #{stu_cd}, #{stu_day_cd})
+   </insert>
+   
+   <!-- 참가중인 스터디 개수 -->
+      <select id="memStudyCount" resultType="java.lang.Integer">
+      SELECT COUNT(*) AS STU_COUNT
+      FROM VIEW_MY_STU
+      WHERE MEM_CD = #{mem_cd}
+   </select>
+   
+   <!-- 페이징 처리 -->
+   <!-- 검색완료된 스터디방 개수 조회 studySearchCount() -->
+   <select id="studySearchCount" resultType="java.lang.Integer">
+      SELECT COUNT(*) AS COUNT
+      FROM VIEW_STU_LIST
+      WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+      <choose>
+      	<!-- 검색이랑 세부지역 다 null이 아닐 때(검색,필터했을때) -->
+         <when test='searchValue != null and spc_area_cd != null'>
+            AND ${searchKey} LIKE UPPER('%${searchValue}%')
+            AND SPC_AREA_CD = #{spc_area_cd}
+         </when>
+         <!-- 검색이 null 아니면서 세부지역이 null 일 때(검색만) -->
+         <when test='searchValue != null and spc_area_cd == null'>
+            AND ${searchKey} LIKE UPPER('%${searchValue}%')
+         </when>
+         <!-- 검색이 null 이고 세부지역이 null이 아닐 때(필터만) -->
+         <when test='searchValue == null and spc_area_cd != null'>
+            AND SPC_AREA_CD LIKE #{spc_area_cd}
+         </when>
+         
+      </choose>
+      
+   </select>
+   
+   <!-- 실제 출력 스터디 리스트 -->
+   <select id="getListData" parameterType="com.sys.comeit.dto.StudyDTO" resultType="com.sys.comeit.dto.StudyDTO">
+      SELECT STU_CD, CRT_DATE, TITLE, STR_DATE, MEM_NUM, CMT_DATE, AREA_NAME, SPC_AREA_NAME, MEET_TERM, IDNTT_TYPE, LV, CAT_NAME, SCRT_NUM, END_DATE, IMG_URL
+      FROM
+      (
+          SELECT ROWNUM AS RNUM
+           , DATA.* 
+          FROM 
+          (
+              SELECT STU_CD, CRT_DATE, TITLE, STR_DATE, MEM_NUM, CMT_DATE, AREA_NAME, SPC_AREA_NAME
+                   , MEET_TERM, IDNTT_TYPE, LV, CAT_NAME, SCRT_NUM, END_DATE, IMG_URL
+              FROM VIEW_STU_LIST
+              WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+              <choose>
+              	<!-- 검색이랑 세부지역 다 null이 아닐 때(검색,필터했을때) -->
+                 <when test='searchValue != null and spc_area_cd != null'>
+                    AND ${searchKey} LIKE UPPER('%${searchValue}%')
+                    AND SPC_AREA_CD = #{spc_area_cd}
+                    ORDER BY STU_CD DESC
+                ) DATA
+            )
+            WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>= #{end}
+                 </when>
+                 <!-- 검색이 null 아니면서 세부지역이 null 일 때(검색만) -->
+                 <when test='searchValue != null and spc_area_cd == null'>
+                    AND ${searchKey} LIKE UPPER('%${searchValue}%')
+                    ORDER BY STU_CD DESC
+                ) DATA
+            )
+            WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>= #{end}
+                 </when>
+                 <!-- 검색이 null 이고 세부지역이 null이 아닐 때(필터만) -->
+                 <when test='searchValue == null and spc_area_cd != null'>
+                    AND SPC_AREA_CD = #{spc_area_cd}
+                    ORDER BY STU_CD DESC
+                ) DATA
+            )
+            WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>= #{end}
+                 </when>
+                 <!-- 둘다 null 일 때 -->
+                 <otherwise>
+                    ORDER BY STU_CD DESC
+                ) DATA
+            )
+            WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>= #{end}
+                 </otherwise>
+              </choose>
+   </select>
+
+   <!-- 스터디 수정 페이지 노출 -->
+   <select id="studyDetailMod" resultType="com.sys.comeit.dto.StudyDTO">
+	   	SELECT STU_CD, TITLE, CONTENT, STR_DATE, MEM_NUM, CMT_DATE, AREA_NAME, SPC_AREA_NAME, CAT_NAME, MEET_TERM, IDNTT_TYPE, LV
+		FROM VIEW_STU_LIST
+		WHERE STU_CD = #{stu_cd}
+   </select>
+   
+   <!-- 특정 스터디방의 관심 키워드들 노출 -->
+   <select id="studyDetailTags" resultType="com.sys.comeit.dto.StudyDTO">
+   		SELECT INT_TAG_NAME
+		FROM VIEW_STU_TAGS
+		WHERE STU_CD = #{stu_cd}
+   </select>
+   
+   <!-- 특정 스터디방의 요일들 노출 -->
+   <select id="studyDetailDays" resultType="com.sys.comeit.dto.StudyDTO">
+   		SELECT DAY_NAME AS STU_DAY_NAME
+		FROM VIEW_STU_DAYS
+		WHERE STU_CD = #{stu_cd}
+   </select>
+   
+   <!-- 스터디 수정 액션 -->
+   <update id="studyModify">
+   		UPDATE TBL_STU
+		SET CONTENT = #{content}
+		WHERE STU_CD = #{stu_cd}
+   </update>
+   
+</mapper>

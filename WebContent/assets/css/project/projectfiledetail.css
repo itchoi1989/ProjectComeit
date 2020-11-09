@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+.detail th
+{
+	text-align: center;
+	background-color: #EEEEEE;
+}
+.tit
+{
+	text-align: center;
+}
+.content
+{
+	vertical-align: top;
+	height: 400px;
+}
+.repBtn
+{
+	text-align: right;
+}
+.reList
+{
+	margin-top: 20px;
+}
+.btns .leftBtn, .btns .rightBtn
+{
+	display: inline-block;
+}
+.btns .rightBtn
+{
+	float: right;
+}

@@ -1,0 +1,55 @@
+@charset "UTF-8";
+.paging
+{
+	text-align: center;
+}
+.pagination>li>a, .pagination>li>span
+{
+	color: black;
+}
+
+.add
+{
+	margin-top: 15px;
+}
+
+.searchRow
+{
+	margin-bottom: 30px;
+}
+
+.col-md-12 > .searchSel
+{
+	margin-top: 15px;
+}
+
+.col-md-12 > .search
+{
+	margin-left: 10px;
+}
+
+.col-md-12 > .searchSel
+{
+	width: 150px;
+	height: 36px;
+	margin-right: 20px;
+}
+
+.col-md-12> .searchBox
+{
+	width: 500px;
+	height: 36px;
+}
+
+.col-md-12> .searchSel ,.col-md-12 > .searchBox
+, .col-md-12 > .fileSearch
+{
+	display: inline-block;
+}
+
+.col-md-12
+{
+	text-align: center;
+}
+
+

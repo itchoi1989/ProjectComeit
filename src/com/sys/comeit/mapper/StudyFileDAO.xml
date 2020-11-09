@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sys.comeit.idao.IStudyFileDAO">
+
+<!-- 스터디방 별 산출물 게시판 전체 리스트 확인 -->
+<select id="studyFileList" resultType="com.sys.comeit.dto.StudyFileDTO">
+	SELECT ROWNUM AS FILE_ROW_NUM
+      , MEM_CD AS FILE_MEM_CD, ID AS FILE_ID, NAME AS FILE_MEM_NAME, STU_CD AS FILE_STU_CD, OPUT_CD AS FILE_OPUT_CD
+      , TITLE AS FILE_TITLE, CONTENT AS FILE_CONTENT, CRT_DATE AS FILE_CRT_DATE,HITS AS FILE_HITS
+	FROM 
+	(
+	SELECT MEM_CD, ID, NAME, STU_CD, OPUT_CD
+	      , TITLE, CONTENT, CRT_DATE, HITS, BOARD_DEL
+	FROM VIEW_STU_OPUT
+	WHERE STU_CD = #{file_stu_cd}
+	  AND BOARD_DEL IS NULL
+	)
+</select>
+
+<!-- 상세 내역 조회 -->
+<select id="studyFileDetail" resultType="com.sys.comeit.dto.StudyFileDTO">
+	SELECT ID AS FILE_MEM_ID, NAME AS FILE_MEM_NAME, STU_CD AS FILE_STU_CD, OPUT_CD AS FILE_OPUT_CD, MEM_CD AS FILE_MEM_CD
+      , TITLE AS FILE_TITLE, CONTENT AS FILE_CONTENT, CRT_DATE AS FILE_CRT_DATE, HITS AS FILE_HITS
+	FROM VIEW_STU_OPUT
+	WHERE STU_CD = #{file_stu_cd}
+	  AND OPUT_CD = #{file_oput_cd}
+	  AND BOARD_DEL IS NULL
+</select>
+
+<!-- 첨부파일조회 -->
+<select id="fileUrlSearch" resultType="com.sys.comeit.dto.StudyFileDTO">
+	SELECT FILE_CD, FILE_NAME, FILE_URL
+	FROM VIEW_STU_OPUT
+	WHERE STU_CD = #{file_stu_cd}
+	  AND OPUT_CD = #{file_oput_cd}
+	  AND BOARD_DEL IS NULL
+	  AND FILE_DEL IS NULL
+</select>
+
+<!--검색 완료된 파일리스트 개수 조회 -->
+<select id="searchFileCount" resultType="java.lang.Integer">
+	SELECT COUNT(*) AS COUNT
+	FROM VIEW_STU_OPUT
+	WHERE STU_CD = #{file_stu_cd}
+	 <if test="searchValue != null and !searchValue.equals('')">
+			AND ${searchKey} LIKE '%${searchValue}%'
+	 </if>
+</select>
+
+<!-- 리스트 출력 데이터 조회 -->
+<select id="getFileListData" resultType="com.sys.comeit.dto.StudyFileDTO">
+SELECT ROWNUM AS FILE_ROW_NUM , FILE_MEM_CD, FILE_MEM_ID, FILE_MEM_NAME, FILE_STU_CD, FILE_OPUT_CD, FILE_TITLE
+      , FILE_CONTENT, FILE_CRT_DATE, FILE_HITS
+FROM 
+(
+    SELECT DATA.* 
+    FROM 
+    (
+		SELECT MEM_CD AS FILE_MEM_CD, ID AS FILE_MEM_ID, NAME AS FILE_MEM_NAME, STU_CD AS FILE_STU_CD, OPUT_CD AS FILE_OPUT_CD
+	        , TITLE AS FILE_TITLE, CONTENT AS FILE_CONTENT, CRT_DATE AS FILE_CRT_DATE,HITS AS FILE_HITS , BOARD_DEL
+		FROM VIEW_STU_OPUT
+		WHERE STU_CD = #{file_stu_cd}
+		<choose>
+		<when test="searchValue != null">
+        AND BOARD_DEL IS NULL
+        AND ${searchKey} LIKE '%${searchValue}%'
+        ORDER BY FILE_CRT_DATE DESC
+    	)DATA
+)
+	WHERE ROWNUM<![CDATA[>]]>= #{start} AND ROWNUM <![CDATA[<]]>=#{end}
+		</when>
+		<otherwise>
+		  AND BOARD_DEL IS NULL
+        ORDER BY FILE_CRT_DATE DESC
+    	)DATA
+)
+	WHERE ROWNUM<![CDATA[>]]>= #{start} AND ROWNUM <![CDATA[<]]>=#{end}
+		</otherwise>
+		  </choose>	
+</select>
+
+
+<!-- 스터디방 첨부파일 있는 산출물 등록 -->
+<select id="fileAdd" parameterType="com.sys.comeit.dto.StudyFileDTO" statementType="CALLABLE">
+	   { CALL PRC_STU_FILE
+	      (
+	         #{file_stu_join_cd}
+	         , #{file_title}
+	         , #{file_content}
+	         , #{file_name}
+	         , #{file_url}
+	      )
+	   }
+</select>
+
+<!-- 스터디방 첨부파일 없는 산출물 등록 -->
+<insert id="fileboardAdd">
+	INSERT INTO TBL_STU_OPUT(STU_OPUT_CD, STU_JOIN_CD, TITLE, CONTENT, CRT_DATE, HITS, DEL_DATE)
+	VALUES('SOPUT'||SEQ_STU_OPUT.NEXTVAL, #{file_stu_join_cd}, #{file_title}, #{file_content}, SYSDATE, 0, NULL)
+</insert>
+
+
+<!-- 참가중인 스터디방 참가코드 조회 -->
+<select id="fileStuJoinCd" resultType="java.lang.String">
+	SELECT STU_JOIN_CD AS FILE_STU_JOIN_CD
+	FROM TBL_STU_JOIN
+	WHERE STU_CD = #{file_stu_cd}
+	  AND MEM_CD = #{file_mem_cd}
+</select>
+
+</mapper>

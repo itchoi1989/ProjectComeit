@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.ISpcAreaDAO">
+
+	<select id="spcAreaList" resultType="com.sys.comeit.dto.SpcAreaDTO">
+		SELECT SPC_AREA_CD, SPC_AREA_NAME
+		FROM TBL_SPC_AREA
+		WHERE AREA_CD=#{area_cd}
+		ORDER BY SPC_AREA_NAME
+	</select>
+	
+</mapper>

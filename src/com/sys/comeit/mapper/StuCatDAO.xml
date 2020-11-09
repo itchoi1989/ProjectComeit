@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IStuCatDAO">
+
+	<select id="stuCatList" resultType="com.sys.comeit.dto.StuCatDTO">
+		SELECT STU_CAT_CD, CAT_NAME 
+		FROM TBL_STU_CAT
+		ORDER BY STU_CAT_CD
+	</select>
+	
+</mapper>

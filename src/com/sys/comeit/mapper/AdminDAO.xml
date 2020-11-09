@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IAdminDAO">
+	
+	<!-- 관리자 정보 조회 list() -->
+	<select id="adminList" resultType="com.sys.comeit.dto.AdminDTO">
+		SELECT NAME, ADMIN_CD, TEL, EMAIL, GRDS_NAME
+		FROM VIEW_ADMLIST
+	</select>
+
+	<!-- 총 관리자 회원 수 조회 adminCount() -->
+	<select id="adminCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_ADMIN
+	</select>
+	
+	<!-- 로그인 -->
+	<select id="adminLogin" resultType="java.lang.String">
+     	SELECT NAME
+		FROM TBL_ADMIN
+		WHERE ADMIN_CD=#{admin_cd}
+  		  AND PWD=CRYPTPACK.ENCRYPT(#{pwd},#{pwd})
+	</select>
+	
+	<!-- 한명의 관리자의 리스트를 뽑아오는 구문 -->
+	<select id="adminSearchList" resultType="com.sys.comeit.dto.AdminDTO">
+		SELECT ADMIN_CD, ADM_GRDS_NAME, NAME, PWD, EMAIL, TEL
+		FROM VIEW_ADMLIST
+		WHERE ADMIN_CD = #{admin_cd}
+	</select>
+	
+	<insert id="adminAdd" >
+		INSERT INTO TBL_ADMIN(ADMIN_CD, ADM_GRDS_CD, NAME, PWD, EMAIL, TEL)
+		VALUES('ADM'||SEQ_ADMIN.NEXTVAL , 'ADMG1002' , #{name}, '1234' ,#{email}, #{tel})
+	</insert>
+	
+	<update id="adminModify">
+		UPDATE TBL_ADMIN
+		SET PWD= CRYPTPACK.ENCRYPT(#{pwd},#{pwd}) , TEL=#{tel} , EMAIL= #{email}
+		WHERE ADMIN_CD = #{admin_cd}
+	</update>
+	
+	<delete id="adminDelete">
+		DELETE
+		FROM TBL_ADMIN
+		WHERE ADMIN_CD = #{admin_cd}
+	</delete>
+	
+	<select id="banList" resultType="com.sys.comeit.dto.BanDTO">
+		SELECT NB.LNGG_BAN_CD AS LNGG_BAN_CD, NB.BAN AS BAN, AD.NAME AS NAME, NB.CRT_DATE AS CRT_DATE, AD.ADMIN_CD AS ADMIN_CD
+		FROM TBL_LNGG_BAN NB, TBL_ADMIN AD
+		WHERE NB.ADMIN_CD = AD.ADMIN_CD(+)
+		ORDER BY LNGG_BAN_CD DESC
+	</select>
+	
+	<insert id="banAdd">
+		INSERT INTO TBL_LNGG_BAN(LNGG_BAN_CD, ADMIN_CD, BAN, CRT_DATE)
+		VALUES('LNGBN'||SEQ_LNGG_BAN.NEXTVAL, #{admin_cd}, #{ban}, SYSDATE)
+	</insert>
+	
+	<!-- 멤버 정보 조회 list() -->
+	<select id="admmemList" resultType="com.sys.comeit.dto.AdmMemDTO">
+	   SELECT MM.MEM_CD AS MEM_CD, MM.NAME AS NAME , MM.ID AS ID, MM.EMAIL AS EMAIL
+	        , MM.TEL AS TEL, P.PROF_CD AS PROF_CD, MM.AREA_NAME AS AREA_NAME
+	        , MM.SPC_AREA_NAME AS SPC_AREA_NAME , MM.JOIN_DATE AS JOIN_DATE
+	   FROM VIEW_MEM_MY MM, TBL_PROF P
+	   WHERE MM.MEM_CD = P.MEM_CD(+)
+	</select>
+	
+	<!-- 강사 정보 조회 list() -->
+	<select id="admproList" resultType="com.sys.comeit.dto.AdmMemDTO">
+	SELECT P.PROF_CD AS PROF_CD, MM.NAME AS NAME, MM.ID AS ID
+	     , MM.EMAIL AS EMAIL, MM.TEL AS TEL , B.BANK_NAME AS BANK_NAME
+	     , P.ACNT_NUM AS ACNT_NUM, P.CRT_DATE AS CRT_DATE
+	FROM VIEW_MEM_MY MM, TBL_PROF P, TBL_BANK B
+	WHERE MM.MEM_CD(+) = P.MEM_CD
+	AND P.BANK_CD = B.BANK_CD
+	</select>
+	
+	
+	<delete id="banDelete">
+		DELETE
+		FROM TBL_LNGG_BAN
+		WHERE LNGG_BAN_CD=#{lngg_ban_cd}
+	</delete>
+	
+	<!-- 업체 명단 정보 조회 list() -->
+	<select id="admspaList" resultType="com.sys.comeit.dto.AdmSpaReqDTO">
+		SELECT spa_cd, spa_name, name, spa_id, email, tel, dtl_addr, join_date
+		FROM VIEW_SPAREQLIST
+		WHERE TYPE ='Y'
+		AND PRCS_DATE IS NOT NULL
+	</select>
+	
+	<!-- 업체 거부 명단 정보 조회 list() -->
+	<select id="admspanoList" resultType="com.sys.comeit.dto.AdmSpaReqDTO">
+		SELECT SPA_REQ_CD ,SPA_ID, SPA_NAME, SPA_ID, PRCS_DATE, PRCS_RSN, ADM_NAME
+		FROM VIEW_SPAREQLIST
+		WHERE TYPE ='N'
+	</select>
+	
+	<!-- 업체 요청 관리 list() -->
+	<select id="adminComAppealList" resultType="com.sys.comeit.dto.AdmSpaReqDTO">
+		SELECT SPA_REQ_CD, SPA_NAME, SPA_ID, COM_NAME, REQ_DATE, TYPE, PRCS_DATE, ADM_NAME
+		FROM VIEW_SPAREQLIST
+	</select>
+	
+	<!-- 하나의 업체 소개내용 list() -->
+	<select id="admSpaIntro" resultType="com.sys.comeit.dto.AdmSpaReqDTO">
+		SELECT ONE_INTRO, USE_HRS, RSV_NOTES, DTL_INTRO ,DTL_ADDR
+		FROM TBL_SPA_REQ
+		WHERE SPA_REQ_CD = #{spa_req_cd}
+	</select>
+	
+	<update id="spaCheckMod">
+		UPDATE TBL_SPA_REQ
+		SET CHECK_TYPE_CD = 'CHET1003'
+		WHERE SPA_REQ_CD = #{spa_req_cd}
+	</update>
+	
+	<update id="spaConfirmMod">
+		UPDATE TBL_SPA_REQ
+		SET ADMIN_CD = #{admin_cd} , CHECK_TYPE_CD = #{check_type_cd}
+		  , PRCS_DATE = SYSDATE , PRCS_RSN = #{prcs_rsn}
+		WHERE SPA_REQ_CD = #{spa_req_cd}
+	</update>
+	
+	<!-- 페이징 처리 -->
+	<!-- 검색완료된 스터디방 개수 조회 studySearchCount() -->
+	<select id="comapplSearchCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VIEW_SPAREQLIST
+		<if test="searchValue != null and !searchValue.equals('')">
+			WHERE ${searchKey} LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="comapplListData" resultType="com.sys.comeit.dto.AdmSpaReqDTO">
+		SELECT *
+		FROM
+		(
+		    SELECT ROWNUM AS RNUM
+		     , DATA.* 
+		    FROM 
+		    (
+		        SELECT SPA_REQ_CD, SPA_NAME, SPA_ID, COM_NAME, REQ_DATE
+		             , TYPE, PRCS_DATE, ADM_NAME, CHECK_TYPE_CD
+                FROM VIEW_SPAREQLIST
+		        <choose>
+		        	<when test="searchValue != null">
+		        		WHERE ${searchKey} LIKE '%${searchValue}%'
+				        ORDER BY SPA_REQ_CD DESC
+				    ) DATA
+				)
+				WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>=#{end}
+		        	</when>
+		        	<otherwise>
+		        		ORDER BY SPA_REQ_CD DESC
+				    ) DATA
+				)
+				WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>=#{end}
+		        	</otherwise>
+		        </choose>
+	</select>
+	
+	
+	
+	
+	<!-- 페이징 처리 -->
+	<!-- 검색완료된 금지어 개수 조회 studySearchCount() -->
+	<select id="banapplSearchCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VIEW_BANLIST
+		<if test="searchValue != null and !searchValue.equals('')">
+			WHERE ${searchKey} LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="banapplListData" resultType="com.sys.comeit.dto.BanDTO">
+		SELECT *
+		FROM
+		(
+		    SELECT ROWNUM AS RNUM
+		     , DATA.* 
+		    FROM 
+		    (
+		    	SELECT LNGG_BAN_CD, BAN, NAME, CRT_DATE, ADMIN_CD
+                FROM VIEW_BANLIST
+		        <choose>
+		        	<when test="searchValue != null">
+		        		WHERE ${searchKey} LIKE '%${searchValue}%'
+				        ORDER BY LNGG_BAN_CD DESC
+				    ) DATA
+				)
+				WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>=#{end}
+		        	</when>
+		        	<otherwise>
+		        		ORDER BY LNGG_BAN_CD DESC
+				    ) DATA
+				)
+				WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>=#{end}
+		        	</otherwise>
+		        </choose>
+	</select>
+	
+	<!-- 스터디방 신고 조회 -->
+	<select id="admstureqList" resultType="com.sys.comeit.dto.AdmStuReqDTO">
+		SELECT STU_REP_CD, MEM_ID, TYPE_NAME, STU_CD, TITLE, ADMIN_CD, NAME, CHECK_TYPE_CD, REP_DATE, PRCS_DATE, REP_RSN, PRCS_RSN
+		FROM VIEW_STU_REP_LIST
+	</select>
+	
+	<!-- 스터디방 신고 요청 확인 -->
+	<update id="stuReqCheckMod">
+		UPDATE TBL_STU_REP
+		SET CHECK_TYPE_CD = 'CHET1003'
+		WHERE STU_REP_CD = #{stu_rep_cd}
+	</update>
+	
+	<!-- 스터디방 신고 요청 승인/거부 -->
+	<update id="stuReqConfirmMod">
+		UPDATE TBL_STU_REP
+		SET ADMIN_CD = #{admin_cd} , CHECK_TYPE_CD = #{check_type_cd}
+		, PRCS_DATE = SYSDATE , PRCS_RSN = #{prcs_rsn}
+		WHERE STU_REP_CD = #{stu_rep_cd}
+	</update>
+	
+	<!-- 정산 조회 -->
+	<select id="admCalList" resultType="com.sys.comeit.dto.AdminCalDTO">
+		SELECT LC.LEC_CD AS LEC_CD, LC.MEM_ID AS MEM_ID, LC.PROFIT AS PROFIT
+    		 , LC.RFND_FEE AS RFND_FEE, L.CAL_FEE AS CAL_FEE, L.CAL_DATE AS CAL_DATE , L.ADMIN_CD AS ADMIN_CD
+		FROM VIEW_LEC_CAL_LIST LC, TBL_LEC_CAL L
+		WHERE LC.LEC_CD = L.LEC_CD(+)
+	</select>
+	
+	<insert id="lecCalAdd" >
+		INSERT INTO TBL_LEC_CAL(LEC_CAL_CD, LEC_CD, ADMIN_CD, CAL_FEE, CAL_DATE)
+		VALUES('LECC' || SEQ_LEC_CAL.NEXTVAL, #{lec_cd}, #{admin_cd} , #{cal_fee} , SYSDATE)
+	</insert>
+	
+	
+</mapper>
+
+

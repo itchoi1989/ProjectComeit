@@ -1,0 +1,124 @@
+@charset "UTF-8";
+body.boheader .header
+{
+	position:fixed!important;
+	z-index: 9000 !important;	
+}
+
+.dropdown-menu>li>a
+{
+	color: #052463 !important;	
+}
+.navbar-inverse .navbar-nav>li>a {
+    color: #052463 !important;
+    font-size: 13pt !important;
+    background: white !important;
+}
+.navbar-inverse
+{
+	border-bottom-color: #052463 !important;
+	border-left: none !important;
+	border-right: none !important;
+	background-color:white !important;
+	border-top: none !important;
+}
+.navbar-inverse .navbar-toggle
+{
+	border-color: #052463 !important;
+}
+.navbar-inverse .navbar-toggle .icon-bar
+{
+	background-color: #052463 !important;
+}
+.navbar-inverse .navbar-toggle:hover .icon-bar
+{
+	background-color: white !important;
+}
+.navbar-toggle
+{
+	background: white !important;
+	
+}
+.navbar-toggle:hover
+{
+	background: #052463 !important;
+}
+.navbar-collapse.collapse {
+	background: white !important;	
+	border: none !important;
+}
+.navbar-inverse .navbar-nav>li>a:hover{
+    color: white !important;
+    font-size: 13pt !important;
+    background: #052463 !important;
+}
+.navbar-inverse .navbar-brand {
+    color: #052463 !important;
+    background: white !important;
+}
+.mega-dropdown {
+  position: static !important;
+}
+.mega-dropdown-menu {
+    padding: 20px 0px;
+    width: 100%;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.mega-dropdown-menu > li > ul {
+  padding: 0;
+  margin: 0;
+}
+.mega-dropdown-menu > li > ul > li {
+  list-style: none;
+}
+.mega-dropdown-menu > li > ul > li > a {
+  display: block;
+  color: #222;
+  padding: 3px 5px;
+}
+.mega-dropdown-menu > li ul > li > a:hover,
+.mega-dropdown-menu > li ul > li > a:focus {
+  text-decoration: none;
+}
+.mega-dropdown-menu .dropdown-header {
+  font-size: 18px;
+  color: #ff3546;
+  padding: 5px 60px 5px 5px;
+  line-height: 30px;
+}
+
+.carousel-control {
+  width: 30px;
+  height: 30px;
+  top: -35px;
+
+}
+.left.carousel-control {
+  right: 30px;
+  left: inherit;
+}
+.carousel-control .glyphicon-chevron-left, 
+.carousel-control .glyphicon-chevron-right {
+  font-size: 12px;
+  background-color: #fff;
+  line-height: 30px;
+  text-shadow: none;
+  color: #333;
+  border: 1px solid #ddd;
+}
+.header
+{
+	width: 100%;
+	border: none !important;
+	color: white;
+}
+.navbar-header
+{
+	color: white;
+}
+.navbar-header:hover
+{
+	background-color:#2c4b69;
+	color: white;
+}

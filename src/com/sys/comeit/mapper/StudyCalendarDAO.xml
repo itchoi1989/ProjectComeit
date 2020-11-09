@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sys.comeit.idao.IStudyCalendarDAO">
+	
+	<!-- 캘린더 전체 리스트 -->
+	<select id="studyCalList" resultType="com.sys.comeit.dto.StudyCalendarDTO">
+		SELECT STU_CD, STU_JOIN_CD, STU_JOIN_NAME, MEM_CD, STU_CAL_CD, STR_DATE, END_DATE, CONTENT, CRT_DATE, DEL_DATE
+		FROM VIEW_STU_CAL
+		WHERE STU_CD = #{stu_cd}
+		  AND DEL_DATE IS NULL
+	</select>
+	
+	<!-- 작성자의 스터디 참가 코드 알아내기 -->
+	<select id="studyCalJoin" resultType="java.lang.String">
+		SELECT STU_JOIN_CD
+		FROM TBL_STU_JOIN SJ, TBL_MEM_CD MC, TBL_MEM_JOIN MJ
+		WHERE SJ.MEM_CD = MC.MEM_CD
+		  AND MC.MEM_CD = MJ.MEM_CD
+		  AND MC.MEM_CD = #{mem_cd}
+		  AND SJ.STU_CD = #{stu_cd}
+	</select>
+	
+	<!-- 캘린더 등록 -->
+	<insert id="studyCalInsert">
+		INSERT INTO TBL_STU_CAL(STU_CAL_CD, STU_JOIN_CD, STR_DATE, END_DATE, CONTENT, CRT_DATE, DEL_DATE)
+		VALUES('SCAL'||SEQ_STU_CAL.NEXTVAL, #{stu_join_cd}, #{str_date}, #{end_date}, #{content}, SYSDATE, NULL);
+	</insert>
+
+</mapper>

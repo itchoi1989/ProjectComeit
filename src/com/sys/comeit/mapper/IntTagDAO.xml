@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IIntTagDAO">
+
+	<select id="intTagList" resultType="com.sys.comeit.dto.IntTagDTO">
+		SELECT INT_TAG_CD, INT_TAG
+		FROM TBL_INT_TAG
+		ORDER BY INT_TAG_CD
+	</select>
+	
+</mapper>

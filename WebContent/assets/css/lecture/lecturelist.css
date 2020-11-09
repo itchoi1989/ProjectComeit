@@ -1,0 +1,212 @@
+@charset "UTF-8";
+.btn-link, .btn-link.active, .btn-link:active, .btn-link[disabled], fieldset[disabled] .btn-link {
+    background-color: transparent !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    font-size: 14pt !important;
+    padding: 0!important;
+}
+.cat .checkboxcat input, .inwon .radioNum input, .level .checkboxLevel input
+{
+   width: 30px;
+}
+.level .iconLv
+{
+	color: #009500;
+}
+.location .iconArea
+{
+	color: #ce6868;
+}
+.numb .iconNum
+{
+	color: #0057ae;
+}
+.filterDiv
+{
+   text-align: center;
+}
+a, .btn-link
+{
+   color: #033158 !important;
+}
+ul :hover 
+{
+   background-color: #f9fbff;
+}
+.sub
+{
+   text-align: right;
+}
+.pagination
+{
+   margin:0 auto; 
+
+} 
+.paging
+{
+   text-align: center;
+
+}
+.pagination>li>a, .pagination>li>span
+{
+   color: black;
+   text-align: center;
+}
+.firstLine .listTitle, .firstLine .lock
+{
+   display: inline-block;
+}
+.firstLine .lock
+{
+   float: right;
+   margin: 2.25%
+}
+.create
+{
+   margin-top: 20px;
+   position: relative;
+}
+.createBtn
+{
+   position: absolute;
+   bottom: 0;
+   right: 0;   
+}
+.lecture-img
+{
+   margin-top: 20px;
+   width: 100%;
+   height:300px;
+   border-radius: 10px;
+}
+
+.content
+{
+   margin-top: 20px;
+   margin-bottom: 20px;
+   
+}
+.lecture-date
+{
+   margin-right: 20px;
+}
+.search
+{
+   margin: 0 auto;
+}
+.list
+{
+   margin-top: 20px;
+   margin-bottom: 20px;
+}
+dt
+{
+   margin-bottom: 10px;
+   font-size: 14pt;
+   font-weight: bold;
+}
+dd
+{
+   font-family: 나눔고딕;
+   font-weight: bold;
+   color: #4a4a4a;
+   margin-left: 2px;
+}
+
+.list-lecture {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0;
+}
+.list-lecture .list-lecture-item {
+   border: 1px solid #c0c0c0;
+   border-radius: 10px;
+    display: flex;
+    position: relative;
+    color: #263747;
+    padding: 10px;
+    font-size: 0;
+    margin-top: 10px;
+}
+
+.list-lecture .list-lecture-item .lecture-logo {
+   margin: 2px;
+    width: 182px;
+    max-width: 16rem;
+    height: 120px;
+    max-height: 16rem;
+    border-radius: 0.5rem;
+    margin-right: 20px;
+}
+
+
+
+.list-lecture .list-lecture-item .item-body {
+    width: calc(100% - 6rem);
+}
+.list-lecture .list-lecture-item .item-body, .list-lecture .list-lecture-item .item-header {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.list-lecture .list-lecture-item .lecture-title {
+    /* transition-duration: 0.08s;
+    transition-property: all;
+    transition-timing-function: ease-in-out;
+    transition-delay: initial; */
+    font-weight: 500;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    word-wrap: break-word;
+}
+.list-lecture .list-lecture-item .lecture-info {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.375rem;
+}
+.list-lecture .list-lecture-item .lecture-info li {
+    font-size: 14px;
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 1.5rem;
+    color: #98A8B9;
+}
+.list-lecture-tags {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0 0;
+}
+.list-lecture-tags .stack-item {
+    font-size: 12px;
+    line-height: 1.5;
+    display: inline-block;
+    margin: 0 0.25rem 0.25rem 0;
+    padding: 0.1875rem 0.5rem;
+    vertical-align: top;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    color: #44576C;
+    background-color: #E9ECF3;
+}
+
+.search > input.tag
+{
+   width: 30%;
+}
+.search > input.title
+{
+   width: 58%;
+}
+.search > button.searchBtn
+{
+   width: 10%;
+}
+div > h5
+{
+   display: inline;
+}

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  
+<mapper namespace="com.sys.comeit.idao.ILectureDAO">
+
+	<!-- <insert id="lectureInsert">
+		INSERT INTO TBL_LEC(LEC_CD, PROF_CD, SPC_AREA_CD
+		, LEC_TERM_CD, LEC_NAME, CRT_DATE, STR_DATE, LEC_FEE
+		, LEC_INTRO, MIN_MEM, MAX_MEM)
+		VALUES('LEC' || SEQ_LEC.NEXTVAL, 'PROF1001', #{spc_area_cd}
+		, #{lec_term_cd}, #{lec_name}, SYSDATE, #{str_date} , #{lec_fee}
+		, #{lec_intro}, #{min_mem}, #{max_mem})
+	</insert> -->
+	
+	<select id="lectureInsert" parameterType="com.sys.comeit.dto.LectureDTO" statementType="CALLABLE">
+	   { CALL PRC_LEC_CRT
+	      (
+	           #{prof_cd}
+	         , #{spc_area_cd}
+	         , #{lec_term_cd}
+	         , #{lec_name}
+	         , #{str_date}
+	         , #{lec_fee}
+	         , #{lec_intro}
+	         , #{min_mem}
+	         , #{max_mem}
+	         , #{lec_cd, mode=OUT, jdbcType=VARCHAR}
+	      )
+	   }
+	</select>
+	
+	<insert id="insertIntTag">
+		INSERT INTO TBL_LEC_INT_TAG(LEC_INT_TAG_CD, INT_TAG_CD, LEC_CD)
+		VALUES('LECIT' || SEQ_LEC_INT_TAG.NEXTVAL, #{int_tag_cd}, #{lec_cd})
+	</insert>
+	
+	<insert id="insertEtcTag">
+		INSERT INTO TBL_LEC_INT_ETC_TAG(LEC_INT_ETC_TAG_CD, LEC_CD, ETC_TAG)
+		VALUES('LECET' || SEQ_LEC_INT_ETC_TAG.NEXTVAL, #{lec_cd}, #{etc_tag})
+	</insert>
+	
+	<select id="etcTagCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM TBL_LEC_INT_ETC_TAG
+		WHERE ETC_TAG=#{etc_tag}
+	</select>
+	
+	<insert id="addTagName">
+		INSERT INTO TBL_INT_TAG(INT_TAG_CD, INT_TAG)
+		VALUES('INT'||SEQ_INT_TAG.NEXTVAL, #{etc_tag})
+	</insert>
+	
+	<insert id="addLecturePrgTime">
+		INSERT INTO TBL_LEC_PRG_TIME(LEG_PRG_TIME_CD, LEC_CD, DAY_CD
+		, STR_HRS, END_HRS)
+		VALUES('LECPT' || SEQ_LEC_PRG_TIME.NEXTVAL, #{lec_cd}, #{day_cd}
+		, #{str_hrs}, #{end_hrs})
+	</insert>
+	
+	<!-- 전체 강의방 조회 -->
+   <select id="lecList" resultType="com.sys.comeit.dto.LectureDTO">
+      SELECT LEC_CD, NAME, AREA_NAME, SPC_AREA_NAME, LEC_NAME, LEC_TERM, CRT_DATE
+           , STR_DATE , LEC_FEE , LEC_INTRO , MIN_MEM , MAX_MEM , IMG_URL, END_DATE
+      FROM VIEW_LEC_INFO
+      WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+      ORDER BY CRT_DATE DESC
+   </select>
+   
+   <!-- 강의방 관심 태그 조회 -->
+	<select id="lecIntTagSearch"
+		resultType="com.sys.comeit.dto.LectureDTO">
+		SELECT LEC_CD, INT_TAG
+		FROM VIEW_LEC_KEYWORD
+		WHERE LEC_CD = #{lec_cd}
+	</select>
+	
+	<!-- 모든 스터디방의 관심 키워드 -->
+   <select id="lecTagList" resultType="com.sys.comeit.dto.LectureDTO">
+		SELECT LEC_CD, INT_TAG
+		FROM VIEW_LEC_KEYWORD
+   </select>
+   
+	<!-- 강의 요일, 시간 조회 -->
+	<select id="lecHrDaySearch" resultType="com.sys.comeit.dto.LectureDTO">
+		SELECT PT.LEC_CD AS LEC_CD, D.DAY_NAME AS DAY_NAME, PT.STR_HRS AS STR_HRS, PT.END_HRS AS END_HRS
+		FROM TBL_LEC_PRG_TIME PT, TBL_DAY D
+		WHERE PT.DAY_CD = D.DAY_CD(+)
+	</select>
+	
+	<!-- 총 스터디방 개수 조회 count() -->
+    <select id="lecCount" resultType="java.lang.Integer">
+      SELECT COUNT(*) AS COUNT
+      FROM VIEW_LEC_INFO
+      WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+    </select>
+	
+	<!-- 페이징 처리 -->
+	<!-- 검색완료된 스터디방 개수 조회 studySearchCount() -->
+	<select id="lecSearchCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VIEW_LEC_INFO
+		WHERE END_DATE <![CDATA[>]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+		<if test="searchValue != null and !searchValue.equals('')">
+			AND ${searchKey} LIKE '%${searchValue}%'
+		</if>
+	</select>
+	
+	<select id="getListData" resultType="com.sys.comeit.dto.LectureDTO">
+		SELECT RNUM, LEC_CD, NAME, AREA_NAME, SPC_AREA_NAME, LEC_NAME, LEC_TERM, CRT_DATE, TO_CHAR(STR_DATE, 'YYYY-MM-DD') AS STR_DATE, LEC_FEE, LEC_INTRO, MIN_MEM, MAX_MEM, IMG_URL, END_DATE
+		FROM
+		(
+		    SELECT ROWNUM AS RNUM
+		     , DATA.* 
+		    FROM 
+		    (
+		        SELECT LEC_CD, NAME, AREA_NAME, SPC_AREA_NAME, LEC_NAME, LEC_TERM, CRT_DATE
+           			 , STR_DATE , LEC_FEE , LEC_INTRO , MIN_MEM , MAX_MEM , IMG_URL, END_DATE
+      			FROM VIEW_LEC_INFO
+		        <choose>
+		        	<when test="searchValue != null">
+		        		WHERE ${searchKey} LIKE '%${searchValue}%'
+				        ORDER BY LEC_CD DESC
+				    ) DATA
+				)
+				WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>=#{end}
+		        	</when>
+		        	<otherwise>
+		        		ORDER BY LEC_CD DESC
+				    ) DATA
+				)
+				WHERE RNUM <![CDATA[>]]>= #{start} AND RNUM <![CDATA[<]]>=#{end}
+		        	</otherwise>
+		        </choose>
+	</select>
+	
+	<!-- 발표용으로 만든 메소드 발표끝나면 지우고 반드시 다시 만들것 -->
+	<select id="getListData2" resultType="com.sys.comeit.dto.LectureDTO">
+		SELECT RNUM, LEC_CD, NAME, AREA_NAME, SPC_AREA_NAME, LEC_NAME, LEC_TERM, CRT_DATE, TO_CHAR(STR_DATE, 'YYYY-MM-DD') AS STR_DATE, LEC_FEE, LEC_INTRO, MIN_MEM, MAX_MEM, IMG_URL, END_DATE
+		FROM
+		(
+		    SELECT ROWNUM AS RNUM
+		     , DATA.* 
+		    FROM 
+		    (
+		        SELECT LEC_CD, NAME, AREA_NAME, SPC_AREA_NAME, LEC_NAME, LEC_TERM, CRT_DATE
+           			 , STR_DATE , LEC_FEE , LEC_INTRO , MIN_MEM , MAX_MEM , IMG_URL, END_DATE
+      			FROM VIEW_LEC_INFO
+                ORDER BY LEC_CD DESC
+				    ) DATA
+				)
+				WHERE LEC_CD = #{lec_cd}
+	</select>
+	
+	<select id="lectureInfo" resultType="com.sys.comeit.dto.LectureDTO" parameterType="java.lang.String">
+		SELECT LEC_NAME, LEC_INTRO, TO_CHAR(STR_DATE, 'YYYY-MM-DD') AS STR_DATE, END_DATE, LEC_FEE, MIN_MEM, MAX_MEM, IMG_URL, SPC_AREA_NAME, LEC_CD
+		FROM VIEW_LEC_INFO
+		WHERE LEC_CD = #{lec_cd}
+	</select>
+	
+	<!-- 강의 상세 페이지 접근 시 해당 회원이 강의의 강사인지 아닌지 판단 -->
+	<!-- 해당 강의의 강사가 아니면 Student Page로 해당 강의의 강사이면
+			Professor Page 로 접근 -->
+	<select id="checkProfcd" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VIEW_PROF_CHECK
+		WHERE LEC_CD = #{lec_cd} AND MEM_CD = #{mem_cd}
+	</select>
+	
+	<select id="findMemcd" resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT MEM_CD
+		FROM VIEW_FIND_MEM_CD
+		WHERE LEC_CD = #{lec_cd}
+	</select>
+	
+	<!-- 결제 완료시 수강 테이블에 인서트 -->
+	<insert id="lecMemInsert">
+		INSERT INTO TBL_LEC_JOIN(LEC_JOIN_CD, LEC_CD, MEM_CD, BANK_CD, JOIN_DATE, ACNT_NUM)
+		VALUES('LECJO' || SEQ_LEC_JOIN.NEXTVAL, #{lec_cd} , #{mem_cd} , 'BNK1002', SYSDATE,  '1234567')
+	</insert>
+	
+	<!-- 강의 수정 관련 쿼리문 -->
+	<!-- TBL_LEC 테이블 업데이트 -->
+	<update id="lectureUpdate" parameterType="com.sys.comeit.dto.LectureDTO">
+		UPDATE TBL_LEC SET SPC_AREA_CD = #{spc_area_cd}, LEC_TERM_CD = #{lec_term_cd}
+		, LEC_NAME = #{lec_name}, STR_DATE = #{str_date}, LEC_INTRO = #{lec_intro}
+		, MIN_MEM = #{min_mem}, MAX_MEM = #{max_mem}
+		WHERE LEC_CD = #{lec_cd}
+	</update>
+	
+	<delete id="intTagDelete">
+		DELETE FROM TBL_LEC_INT_TAG WHERE LEC_CD = #{lec_cd}
+	</delete>
+	
+	<delete id="etcTagDelete">
+		DELETE FROM TBL_LEC_INT_ETC_TAG WHERE LEC_CD = #{lec_cd}
+	</delete>
+	
+	<delete id="lecPrgTimeDelete">
+		DELETE FROM TBL_LEC_PRG_TIME WHERE LEC_CD = #{lec_cd}
+	</delete>
+	
+</mapper>

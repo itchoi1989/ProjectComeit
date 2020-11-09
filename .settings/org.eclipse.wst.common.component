@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="FinalComeit">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="commons-beanutils-1.9.4.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/commons-beanutils-1.9.4/commons-beanutils-1.9.4">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="standard.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/standard/standard">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="com.springsource.org.apache.commons.logging-1.1.1.jar" deploy-path="/WEB-INF/lib/" handle="module:/resource/com.springsource.org.apache.commons.logging-1.1.1/com.springsource.org.apache.commons.logging-1.1.1">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="FinalComeit"/>
+        <property name="java-output-path" value="/FinalComeit/build/classes"/>
+    </wb-module>
+</project-modules>

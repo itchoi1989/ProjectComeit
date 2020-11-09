@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+
+   <!-- ① 기존 코드 -->
+   <!-- ※ Annotation 을 활용하여 Controller 객체를 등록한다. -->
+   <!--    → Annotation 을 활용하여 작성된 Controller 객체를 -->
+   <!--       스프링 컨테이너가 자동으로 스캔하여 확인하고 관리할 수 있도록 처리 -->
+   
+   <!--    → 『base-package』 속성에 -->
+   <!--       Controller 객체가 포함된 패키지 경로를 지정한다. -->
+   <context:component-scan base-package="com.sys.comeit.controller" />
+   
+   <!-- ③ mybatis 등록 과정 중(설정 중) -->
+   <!--    dataSource(JDBC)를 등록하는 과정에서 생겨나는 추가 코드 -->
+   <!-- ※ mybatis 에서 dataSource 를 사용할 수 있도록 환경 설정 추가 -->
+   <!--    즉, dataSource 객체를 등록하는 과정 -->
+   <!--    → 『SimpleDriverDataSource』 -->
+   <bean id="localDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+      <property name="driverClass" value="oracle.jdbc.driver.OracleDriver"></property>
+      <property name="url" value="jdbc:oracle:thin:@15.164.214.186:1521:xe"></property>
+      <property name="username" value="COMEIT"></property>
+      <property name="password" value="team2"></property>
+   </bean>
+   
+   <!-- ② mabatis 등록 과정에서 생겨나는 추가 코드 -->
+   <!-- ※ mybatis 를 사용하기 위한 환경 설정 추가 1 -->
+   <!--    → SqlSessionFactoryBean -->
+   
+   <!-- ④ dataSource 객체 등록 후 마저 등록해서 완성 -->
+   <!-- ※ mybatis 를 사용하기 위한 환경 설정 추가 2 -->
+   <!--    → dataSource 속성에 DI 설정 -->
+   <!--    → mapperLocations 속성에 DI 설정 -->
+   <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="localDataSource"></property>
+      <property name="mapperLocations" value="classpath:com/sys/comeit/mapper/*.xml"></property>
+   </bean>
+   
+   <!-- ⑤ sqlSession 등록 과정에서 생겨나는 추가 코드 -->
+   <!-- ※ mybatis 를 사용하기 위한 환경 설정 추가 3 -->
+   <!--    → 『SqlSessionTemplate』 -->
+   <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+   </bean>
+   
+   <!-- 『org.mybatis.spring.SqlSessionTemplate sqlSesstion』 
+                        = new org.mybatis.spring.SqlSessionTemplate(sqlSessionFactory); -->
+   <!-- ! 이런 식으로 객체 생성하는것. 근데 뭔가 건내주면서 생성하고 싶은것. sqlSessionFactory를 매개변수로 넘기는 것 -->
+   
+   <!-- ! mybatis 는 프로그램이랑 디비랑 연결시켜주는 역할
+   ~~이렇게 디비한테 넘어가면 돼~ 라는게 들어가야 함.
+   쿼리문의 위치가 ~~에 있어~ 라고 알려줘야 함 -->
+</beans>

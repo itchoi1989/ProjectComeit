@@ -1,0 +1,159 @@
+@charset "UTF-8";
+
+.lecTitle > h1 , .lecTitle > .report
+{
+	display: inline-block;
+}
+
+.lecTitle > .row > .col-md-2 >.report
+{
+	margin-left: 10px;
+	width: 30px;
+	height: 30px;
+}
+
+ 
+.lecImg
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	/* width: 1375px;
+	height: 200px; */
+	border-radius: 10px;
+	width: 100%;
+}
+
+.lecTitle
+{
+	margin-bottom: 40px;
+}
+
+.lecMem
+{
+	margin-top: 120px;
+}
+
+
+.lecTitle > h2 , .lecArea > h3 , .lecMem > h3 , .memLeader > h4
+, .member > h4 , .lecTerm > .lecIntro , .lecKey > h3 , .lecLevel > h3
+, .lecCurr > h3, .lecMoney > h3
+{
+	font-weight: bold;
+}
+
+.report
+{
+	margin-left: 200px;
+}
+
+.lecTitle > .join 
+{
+	margin-left: 650px; 
+	/* align: right */
+}
+
+
+.term ,.day, .area, .keword , .level , .curr
+, .name , .manPencil , .position , .keyword ,.oneInt
+, .joinLec ,.joinPro , .lecTerm > .icon
+, .lecArea > .icon , .lecKey > .icon
+, .lecLevel > .icon , .lecCurr > .icon
+, .lecMoney > .icon
+{
+	font-size: 17pt;
+}
+
+.col-md-4
+{
+	border: 1px;
+	border-color: black;
+}
+
+.memImg
+{
+	width: 80px;
+}
+
+.name
+{
+	margin-left: 30px;
+}
+
+.memLeader , .member
+{
+	margin-bottom: 20px;
+}
+
+.userName > h3, .userName > .name
+.userManner > .glyphicon ,.userManner > h3, .userManner > .pencil
+, .userPosi > h3 , .userPosi > .position , .userKey > h3 , .userKey > .keyword
+, .memLeader > img, .memLeader > h4
+, .member > img , .member > h4
+, .lecTerm > .icon , .lecTerm > h3
+, .lecArea > .icon , .lecArea > h3
+, .lecKey > .icon , .lecKey > h3
+, .lecLevel > .icon , .lecLevel > h3
+, .lecCurr > .icon , .lecCurr > h3
+, .lecMoney > .icon, .lecMoney > h3
+{
+	display: inline-block;
+}
+
+.user , .pencil ,.ok
+{
+	font-size: 20px;
+	margin-right: 10px;
+}
+
+.name , .manPencil , .position , .keyword
+{
+	margin-left: 10px;
+}
+
+.icon
+{
+	margin-right: 10px;
+}
+
+.memLeader > .memInfo , .member > .memInfo
+{
+	width: 400px;
+	height: 570px;
+	border: 1px solid #e9e9e9;
+	padding-left: 20px;
+	background-color: #E6E6E6;
+	border-radius: 10px;
+	position: relative;	
+	display: none;
+}
+
+.lecMem > .memLeader
+{
+	padding-top: 20px;
+	padding-left:10px;
+	width: 360px;
+	height: 100px;
+	/* border: 1px solid #e9e9e9; */
+	border-radius: 10px;
+	background-color: #FAFAFA;
+	/* background: linear-gradient( to bottom, #E1B283, white ); */
+	/* font-family: Nanum Gothic; */
+}
+
+.lecMem > .member
+{
+	padding-top: 10px;
+	padding-left:10px;
+	width: 360px;
+	height: 100px;
+	/* border: 1px solid #e9e9e9; */
+	border-radius: 10px;
+	background-color: #FAFAFA;
+	/* background: linear-gradient( to bottom, #E1B283, white ); */
+	/* font-family: Nanum Gothic; */
+}
+
+.member > h4
+{
+	margin-left: 10px;
+}

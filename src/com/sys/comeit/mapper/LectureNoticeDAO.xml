@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.ILectureNoticeDAO">
+	
+	<select id="lectureNoticeList" resultType="com.sys.comeit.dto.LectureNoticeDTO">
+		SELECT ROWNUM AS ROW_NUM, LNTC.LEC_NTC_CD AS LEC_NTC_CD, LNTC.TITLE AS TITLE, MJ.NAME AS NAME
+		, TO_CHAR(LNTC.CRT_DATE, 'YYYY-MM-DD') AS CRT_DATE
+		, LNTC.HITS AS HITS
+		, MJ.MEM_CD AS MEM_CD
+		FROM TBL_LEC_NTC LNTC, TBL_LEC L, TBL_PROF P, TBL_MEM_JOIN MJ
+		WHERE LNTC.LEC_CD = L.LEC_CD
+		AND L.PROF_CD = P.PROF_CD
+		AND P.MEM_CD = MJ.MEM_CD
+		AND LNTC.LEC_CD = #{lec_cd}
+	</select>
+	
+	<select id="lectureNoticeDetail" resultType="com.sys.comeit.dto.LectureNoticeDTO">
+		SELECT LNTC.TITLE AS TITLE
+		, MJ.NAME AS NAME
+		, TO_CHAR(LNTC.CRT_DATE, 'YYYY-MM-DD') AS CRT_DATE
+		, LNTC.HITS AS HITS
+		, LNTC.CONTENT AS CONTENT
+		, MJ.MEM_CD AS MEM_CD
+		FROM TBL_LEC_NTC LNTC, TBL_LEC L, TBL_PROF P, TBL_MEM_JOIN MJ
+		WHERE LNTC.LEC_CD = L.LEC_CD
+		AND L.PROF_CD = P.PROF_CD
+		AND P.MEM_CD = MJ.MEM_CD
+		AND LNTC.LEC_CD = #{lec_cd}
+		AND LNTC.LEC_NTC_CD = #{lec_ntc_cd}
+	</select>
+	
+	<select id="getNoticeListData" resultType="com.sys.comeit.dto.LectureNoticeDTO">
+	SELECT ROWNUM AS ROW_NUM, LEC_NTC_CD, TITLE, NAME
+	, CRT_DATE, HITS, MEM_CD, DEL_DATE
+	FROM
+		(
+			SELECT ROWNUM AS ROW_NUM, LEC_NTC_CD, TITLE, NAME
+				, CRT_DATE, HITS, MEM_CD, DEL_DATE
+		FROM
+		(
+		SELECT LEC_NTC_CD, TITLE, NAME, CRT_DATE, HITS, MEM_CD, DEL_DATE
+		FROM VIEW_LEC_NTC_INFO
+		WHERE LEC_CD = #{lec_cd}
+		AND DEL_DATE IS NULL
+		<choose>
+	      <when test="searchValue != null">
+	      		AND '${searchKey}' LIKE '%${searchValue}%'
+	      		ORDER BY LEC_NTC_CD DESC
+	      		)DATA
+	      	)
+			WHERE ROW_NUM<![CDATA[>]]>= #{start} AND ROW_NUM <![CDATA[<]]>=#{end}
+	      </when>
+	      <otherwise>
+	      		ORDER BY LEC_NTC_CD DESC
+	      		)DATA
+	      	)
+			WHERE ROW_NUM<![CDATA[>]]>= #{start} AND ROW_NUM <![CDATA[<]]>=#{end}
+	      </otherwise>
+	      
+	      </choose>
+		
+	</select>
+	
+	<!--검색 완료된 공지사항 개수 조회 -->
+	<select id="searchNoticeCount" resultType="java.lang.Integer">
+		  SELECT COUNT(*) AS COUNT
+		  FROM TBL_LEC_NTC
+		  WHERE LEC_CD=#{lec_cd}
+		 <if test="searchValue != null and !searchValue.equals('')">
+				AND ${searchKey} LIKE '%${searchValue}%'
+		 </if>
+	</select>
+	
+</mapper>

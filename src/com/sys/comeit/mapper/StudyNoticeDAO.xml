@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sys.comeit.idao.IStudyNoticeDAO">
+
+	<!-- 1번방 공지사항 게시판의 전체 리스트 확인 -->
+	<select id="studyNoticeList" resultType="com.sys.comeit.dto.StudyNoticeDTO">
+      	SELECT ROWNUM AS ROW_NUM
+		     , STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_NAME, MEM_CD, STU_JOIN_CD, TITLE
+		     , CRT_DATE, CONTENT, HITS, DEL_DATE
+		FROM
+		(
+		SELECT STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_NAME, MEM_CD, STU_JOIN_CD, TITLE
+		     , CRT_DATE, CONTENT, HITS, DEL_DATE
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND STU_NTC_PNT_CD = STU_NTC_CD
+		  AND DEL_DATE IS NULL
+		) DATA
+   </select>
+   
+   <!--검색 완료된 공지사항 개수 조회 -->
+	<select id="searchNoticeCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS COUNT
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND STU_NTC_PNT_CD = STU_NTC_CD
+		  AND DEL_DATE IS NULL
+		 <if test="searchValue != null and !searchValue.equals('')">
+				AND ${searchKey} LIKE '%${searchValue}%'
+		 </if>
+	</select>
+	
+	<!-- 리스트 출력 데이터 조회 -->
+	<select id="getNoticeListData" resultType="com.sys.comeit.dto.StudyNoticeDTO">
+	SELECT ROWNUM AS ROW_NUM
+	     , STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_NAME, MEM_CD, STU_JOIN_CD, TITLE
+	     , CRT_DATE, CONTENT, HITS, DEL_DATE
+	FROM
+	(
+	    SELECT ROWNUM AS ROW_NUM
+	         , STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_NAME, MEM_CD, STU_JOIN_CD, TITLE
+	         , CRT_DATE, CONTENT, HITS, DEL_DATE
+	    FROM
+	    (
+	    SELECT STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_NAME, MEM_CD, STU_JOIN_CD, TITLE
+	         , CRT_DATE AS CRT_DATE, CONTENT, HITS, DEL_DATE
+	    FROM VIEW_STU_NTC
+	    WHERE STU_CD = #{stu_cd}
+	      AND STU_NTC_PNT_CD = STU_NTC_CD
+	      AND DEL_DATE IS NULL
+	      <choose>
+	      <when test="searchValue != null">
+	      		AND ${searchKey} LIKE '%${searchValue}%'
+	      		ORDER BY STU_NTC_CD DESC
+	      		)DATA
+	      	)
+			WHERE ROW_NUM<![CDATA[>]]>= #{start} AND ROW_NUM <![CDATA[<]]>=#{end}
+	      </when>
+	      <otherwise>
+	      		ORDER BY STU_NTC_CD DESC
+	      		)DATA
+	      	)
+			WHERE ROW_NUM<![CDATA[>]]>= #{start} AND ROW_NUM <![CDATA[<]]>=#{end}
+	      </otherwise>
+	      
+	      </choose>
+	
+	</select>
+	
+	<!-- 공지사항 게시글 등록 화면 노출 -->
+	<select id="studyNoticeAddData" resultType="com.sys.comeit.dto.StudyNoticeDTO">
+		SELECT DISTINCT(STU_JOIN_NAME), TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI') AS CRT_DATE
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND MEM_CD = #{mem_cd}
+	</select>
+
+	<!-- 작성자의 스터디 참가 코드 알아내기 -->
+	<select id="studyLeaderJoin" resultType="java.lang.String">
+		SELECT STU_JOIN_CD
+		FROM VIEW_STU_INFO
+		WHERE STU_CD = #{stu_cd}
+	</select>
+
+	<!-- 공지사항 게시글 등록 -->
+	<select id="studyNoticeInsert" parameterType="com.sys.comeit.dto.StudyNoticeDTO" statementType="CALLABLE">
+		{ CALL PRC_STU_NTC
+		   (
+		      #{stu_join_cd}
+		      , #{title}
+		      , #{content}
+		   )
+		}
+	</select>
+	
+	<!-- 공지사항 댓글 등록자의 참가코드 알아내기 -->
+	<select id="noticeReCreateJoin" resultType="java.lang.String">
+		SELECT STU_JOIN_CD
+		FROM TBL_STU_JOIN SJ, TBL_MEM_CD MC, TBL_MEM_JOIN MJ
+		WHERE SJ.MEM_CD = MC.MEM_CD
+		  AND MC.MEM_CD = MJ.MEM_CD
+		  AND MC.MEM_CD = #{mem_cd}
+		  AND SJ.STU_CD = #{stu_cd}
+	</select>
+	
+	<!-- 공지사항 댓글 등록 -->
+	<insert id="studyNoticeReInsert">
+		INSERT INTO TBL_STU_NTC(STU_NTC_CD, STU_NTC_CD2, STU_JOIN_CD, TITLE, CRT_DATE, CONTENT)
+		VALUES('STNT'||SEQ_STU_NTC.NEXTVAL, #{stu_ntc_pnt_cd}, #{stu_join_cd}, #{title}, SYSDATE, #{content})
+	</insert>
+	
+	<!-- 공지사항 댓글 삭제 -->
+	<delete id="studyNoticeReDelete">
+		SELECT STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_CD, TITLE
+		     , CRT_DATE, CONTENT, HITS, DEL_DATE
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND STU_NTC_PNT_CD = #{stu_ntc_pnt_cd}
+		  AND STU_NTC_PNT_CD != STU_NTC_CD
+		  AND STU_NTC_CD = #{stu_ntc_cd}
+	</delete>
+	
+	<!-- 공지사항 게시글 수정 -->
+
+	<!-- 공지사항 게시글 삭제 → 부모코드로 삭제 -->
+	
+	<!-- 1번방의 2번 게시물의 데이터 뽑기 -->
+	<select id="studyNoticeDetail" resultType="com.sys.comeit.dto.StudyNoticeDTO">
+		SELECT STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_NAME, MEM_CD, STU_JOIN_CD, TITLE
+     		, TO_CHAR(CRT_DATE,'YYYY-MM-DD HH24:MI') AS CRT_DATE, CONTENT, HITS, DEL_DATE
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND STU_NTC_PNT_CD = #{stu_ntc_pnt_cd}
+		  AND STU_NTC_PNT_CD = STU_NTC_CD
+	</select>
+	
+	<!-- 1번방의 2번 게시물의 댓글 리스트 -->
+	<select id="studyNoticeReList" resultType="com.sys.comeit.dto.StudyNoticeDTO">
+		SELECT STU_CD, STU_NTC_CD, STU_NTC_PNT_CD, STU_JOIN_CD, STU_JOIN_NAME, TITLE
+		     , TO_CHAR(CRT_DATE,'YYYY-MM-DD HH24:MI:SS') AS CRT_DATE, CONTENT, HITS, DEL_DATE
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND STU_NTC_PNT_CD = #{stu_ntc_pnt_cd}
+		  AND STU_NTC_PNT_CD != STU_NTC_CD
+		ORDER BY CRT_DATE DESC
+	</select>
+	
+	<!-- 1번방의 2번 공지사항의 댓글 개수 확인 -->
+	<select id="studyReCount" resultType="java.lang.Integer">
+		SELECT COUNT(*) AS RE_COUNT
+		FROM VIEW_STU_NTC
+		WHERE STU_CD = #{stu_cd}
+		  AND STU_NTC_PNT_CD = #{stu_ntc_pnt_cd}
+		  AND STU_NTC_PNT_CD != STU_NTC_CD
+	</select>
+	
+</mapper>
